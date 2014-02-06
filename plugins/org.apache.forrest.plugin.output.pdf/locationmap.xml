@@ -28,8 +28,25 @@
     </selectors>
   </components>
   <locator>
+    <match pattern="pdf.transform.helper.*">
+      <select>
+        <location src="resources/stylesheets/helper-{1}.xsl"/>
+        <location
+          src="{forrest:forrest.plugins}/org.apache.forrest.plugin.output.pdf/resources/stylesheets/helper-{1}.xsl"/>
+      </select>
+    </match>
     <match pattern="pdf.transform.*.*">
-      <location src="resources/stylesheets/{1}-to-{2}.xsl" />
+      <select>
+        <location src="resources/stylesheets/{1}-to-{2}.xsl"/>
+        <location
+          src="{forrest:forrest.plugins}/org.apache.forrest.plugin.output.pdf/resources/stylesheets/{1}-to-{2}.xsl"/>
+      </select>
+    </match>
+    <match pattern="plugin.translations">
+      <select>
+        <location src="{properties:translations}" />
+        <location src="{forrest:forrest.plugins}/org.apache.forrest.plugin.output.pdf/resources/translations"/>
+      </select>
     </match>
   </locator>
 </locationmap>

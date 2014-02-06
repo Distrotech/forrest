@@ -77,16 +77,16 @@
       <source>
 <![CDATA[
 <project name="mysampleproject" default="main">
-  <property name="notify.email.host" value="smtp.myhost.com"/>
+  <property name="notify.email.host" value="smtp.example.org"/>
   <property name="notify.email.to" value="me@domain.com"/>
   <property name="notify.administrator" value="Your Name"/>
   <property name="getsrc.cvs.user" value="anoncvs"/>
   <property name="getsrc.cvs.password" value="anoncvs"/>
   <property name="getsrc.cvs.root" value="/home/cvspublic"/>
-  <property name="getsrc.cvs.host" value="cvs.myhost.com"/>
+  <property name="getsrc.cvs.host" value="cvs.example.org"/>
   <property name="getsrc.cvs.module" value="myproject"/>
   <property name="deploy.scp.dest" 
-      value="username@myhost.com:/var/www/mydomain/htdocs"/>
+      value="username@example.org:/var/www/example.org/htdocs"/>
 
   <!-- here we declare the ssh keyfile and passphrase in an external file -->
   <import file="../deploy-settings.xml" optional="true"/>
@@ -513,15 +513,13 @@
             </tr>
             <tr>
               <td>deploy.svn.user</td>
-              <td>SVN username to use when committing changes</td>
-              <td></td>
-              <td>Yes</td>
-            </tr>
-            <tr>
-              <td>deploy.svn.password</td>
-              <td>SVN password</td>
-              <td></td>
-              <td>Yes</td>
+              <td>
+                SVN username to use when committing changes.
+                If your "svn username" is not the same as your local system
+                username, then see explanation below.
+              </td>
+              <td>Local system username.</td>
+              <td>No</td>
             </tr>
             <tr>
               <td>deploy.svn.url</td>
@@ -533,10 +531,22 @@
               <td>deploy.svn.commit-message</td>
               <td>Message to use when committing. You probably want to put a
               machine name or person's name here.</td>
-              <td>Automatic publish from forrestbot</td>
+              <td>Publish from forrestbot</td>
               <td>No</td>
             </tr>
           </table>
+          <p>
+            This uses the "svn" executable expected to be present, and its
+            authorisation mechanism.
+          </p>
+          <p>
+            If your "svn username" is different from your local system username
+            create <code>$FORREST_HOME/deploy.svn.settings</code> file like:
+          </p>
+          <source><![CDATA[<?xml version="1.0"?>
+<project>
+  <property name="deploy.svn.user" value="myApacheUsername"/>
+</project>]]></source>
         </section>
         <section id="deploy.ftp">
           <title>deploy.ftp</title>
@@ -695,6 +705,13 @@
         defining the relevant targets in your project buildfile before the
         <code>&lt;import&gt;</code> task (see the example above).
       </p>
+    </section>
+    <section id="refs">
+      <title>Further Reading</title>
+      <ul>
+        <li><link href="site:forrestbot-svn">How to deploy documentation with the Forrestbot "svn" workstage</link></li>
+        <li><link href="site:forrestbot-scp">How to deploy documentation with the Forrestbot "scp" workstage</link></li>
+    </ul>
     </section>
   </body>
 </document>

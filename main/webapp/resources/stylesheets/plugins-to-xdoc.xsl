@@ -18,6 +18,15 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
   <xsl:param name="pluginDocsVersion"/>
+  <xsl:variable name="pluginDocsVersionMajor">
+    <xsl:value-of select="number(substring-before($pluginDocsVersion, '_'))"/>
+  </xsl:variable>
+  <xsl:variable name="pluginDocsVersionMinorStr">
+    <xsl:value-of select="number(substring-after($pluginDocsVersion, '_'))"/>
+  </xsl:variable>
+  <xsl:variable name="pluginDocsVersionMinor">
+    <xsl:value-of select="number(substring($pluginDocsVersionMinorStr, 1, string-length($pluginDocsVersionMinorStr)-1))"/>
+  </xsl:variable>
   <xsl:template match="pluginList">
     <document>
       <header>
@@ -157,6 +166,51 @@
     </section>
   </xsl:template>
   <xsl:template match="plugin">
+<!-- Analyse this plugin's version numbers to ensure that it is suitable to show. -->
+    <xsl:variable name="forrestVersionMajor">
+      <xsl:value-of select="number(substring-before(forrestVersion, '.'))"/>
+    </xsl:variable>
+    <xsl:variable name="forrestVersionMinor">
+      <xsl:value-of select="number(substring-after(forrestVersion, '.'))"/>
+    </xsl:variable>
+    <xsl:variable name="forrestVersionInitialMajor">
+      <xsl:value-of select="number(substring-before(forrestVersionInitial, '.'))"/>
+    </xsl:variable>
+    <xsl:variable name="forrestVersionInitialMinor">
+      <xsl:value-of select="number(substring-after(forrestVersionInitial, '.'))"/>
+    </xsl:variable>
+    <xsl:variable name="showEntry">
+      <xsl:choose>
+        <xsl:when test="string(number($forrestVersionInitialMinor)) = 'NaN'">
+<!-- If the plugin has not declared its initial forrest version, then show it anyway. -->
+          <xsl:text>true</xsl:text>
+        </xsl:when>
+        <xsl:when test="($pluginDocsVersionMajor &gt;= $forrestVersionInitialMajor) and ($pluginDocsVersionMinor &gt;= $forrestVersionInitialMinor)">
+          <xsl:text>true</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>false</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="olderAvailable">
+      <xsl:choose>
+        <xsl:when test="string(number($forrestVersionInitialMinor)) = 'NaN'">
+          <xsl:text>Not known</xsl:text>
+        </xsl:when>
+        <xsl:when test="($forrestVersionMajor &gt;= $pluginDocsVersionMajor) and ($forrestVersionMinor &gt; $pluginDocsVersionMinor)">
+          <xsl:text>Older versions are available to suit this "</xsl:text>
+          <xsl:value-of select="$pluginDocsVersionMajor"/>
+          <xsl:text>.</xsl:text>
+          <xsl:value-of select="$pluginDocsVersionMinor"/>
+          <xsl:text>" version of Forrest. This will be detected automatically. For documentation, please browse.</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>false</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$showEntry='true'">
     <section>
       <title><xsl:value-of select="@name" /></title>
       <table>
@@ -183,6 +237,16 @@
             <xsl:value-of select="@author" />
           </td>
         </tr>
+        <xsl:choose>
+          <xsl:when test="@publish and @publish='false'">
+        <tr>
+          <th width="25%">Not yet published</th>
+          <td>
+            This plugin has not yet been deployed. Only available in the development SVN repository.
+          </td>
+        </tr>
+          </xsl:when>
+          <xsl:otherwise>
         <tr>
           <th width="25%">Website</th>
           <td><a>
@@ -201,6 +265,8 @@
             <xsl:value-of select="@url" /></a>
           </td>
         </tr>
+          </xsl:otherwise>
+        </xsl:choose>
         <tr>
           <th width="25%">Latest Plugin version</th>
           <td>
@@ -209,15 +275,37 @@
         </tr>
         <tr>
           <th width="25%">
-            Minimum Forrest version required *
+            Minimum Forrest version required
           </th>
           <td>
+            <xsl:text>Forrest-</xsl:text>
             <xsl:value-of select="forrestVersion" />
+            is required to use the most recent version of this plugin.
+          </td>
+        </tr>
+        <xsl:if test="$olderAvailable != 'false'">
+          <tr>
+            <th width="25%">
+              Other versions
+            </th>
+            <td>
+              <xsl:value-of select="$olderAvailable" />
+            </td>
+          </tr>
+        </xsl:if>
+        <tr>
+          <th width="25%">
+            Initial Forrest version
+          </th>
+          <td>
+            This plugin was first available for 
+            <xsl:text>Forrest-</xsl:text>
+            <xsl:value-of select="forrestVersionInitial" />
           </td>
         </tr>
         <xsl:if test="../@type='whiteboard'">
           <tr>
-            <th width="25%">
+            <th class="warning" width="25%">
               Warning
             </th>
             <td>
@@ -228,5 +316,6 @@
         </xsl:if>
       </table>
     </section>
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>

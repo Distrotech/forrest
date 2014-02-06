@@ -57,6 +57,10 @@ function searchDev(engine, searchID)
     navigate('http://marc.info/?l=forrest-dev&w=2&r=1&q=b&s=' + searchItem.value);
   } else if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.devel&sort=date&query=' + searchItem.value);
+  } else if (engine == 'gt') {
+    navigate('http://www.gossamer-threads.com/lists/engine?list=forrest&do=search_results&search_forum=forum_2&search_string=' + searchItem.value);
+  } else if (engine == 'mm') {
+    navigate('http://forrest.markmail.org/search/?q=list:org.apache.forrest.dev+' + searchItem.value);
   } else {
     navigate('http://www.mail-archive.com/search?l=dev@forrest.apache.org&q=' + searchItem.value);
   }
@@ -69,6 +73,10 @@ function searchUser(engine, searchID)
     navigate('http://marc.info/?l=forrest-user&r=1&w=2&q=b&s=' + searchItem.value);
   } else if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.user&sort=date&query=' + searchItem.value);
+  } else if (engine == 'gt') {
+    navigate('http://www.gossamer-threads.com/lists/engine?list=forrest&do=search_results&search_forum=forum_1&search_string=' + searchItem.value);
+  } else if (engine == 'mm') {
+    navigate('http://forrest.markmail.org/search/?q=list:org.apache.forrest.user+' + searchItem.value);
   } else {
     navigate('http://www.mail-archive.com/search?l=user@forrest.apache.org&q=' + searchItem.value);
   }
@@ -81,6 +89,10 @@ function searchCommits(engine, searchID)
     navigate('http://marc.info/?l=forrest-svn&r=1&w=2&q=b&s=' + searchItem.value);
   } else if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.cvs&sort=date&query=' + searchItem.value);
+  } else if (engine == 'gt') {
+    navigate('http://www.gossamer-threads.com/lists/engine?list=forrest&do=search_results&search_forum=forum_3&search_string=' + searchItem.value);
+  } else if (engine == 'mm') {
+    navigate('http://forrest.markmail.org/search/?q=list:org.apache.forrest.svn+' + searchItem.value);
   } else {
     navigate('http://www.mail-archive.com/search?l=svn@forrest.apache.org&q=' + searchItem.value);
   }
@@ -91,6 +103,10 @@ function searchSiteCommits(engine, searchID)
   var searchItem = document.getElementById(searchID);
   if(engine == 'marc') {
   navigate('http://marc.info/?l=forrest-site-svn&r=1&w=2&q=b&s=' + searchItem.value);
+  } else if (engine == 'gt') {
+    navigate('http://www.gossamer-threads.com/lists/engine?list=forrest&do=search_results&search_forum=forum_4&search_string=' + searchItem.value);
+  } else if (engine == 'mm') {
+    navigate('http://forrest.markmail.org/search/?q=list:org.apache.forrest.site-svn+' + searchItem.value);
   } else {
   navigate('http://www.mail-archive.com/search?l=site-svn@forrest.apache.org&q=' + searchItem.value);
   }
@@ -99,7 +115,13 @@ function searchSiteCommits(engine, searchID)
 function searchIssue(searchID)
 {
   var searchItem = document.getElementById(searchID);
-  navigate('http://issues.apache.org/jira/secure/QuickSearch.jspa?pid=12310000&searchString=' + searchItem.value);
+  navigate('http://issues.apache.org/jira/secure/IssueNavigator.jspa?query=' + searchItem.value + '&summary=true&description=true&reset=true&body=true&pid=12310000');
+}
+
+function searchMidGmane(searchID)
+{
+  var searchItem = document.getElementById(searchID);
+  navigate('http://mid.gmane.org/' + searchItem.value);
 }
 
 function searchSite(searchID)
@@ -130,10 +152,21 @@ function navProject(searchID) {
 
 function viewXML(xmltype)
 {
+  // View an aspect of the internal data of the current page.
   var href = gBrowser.currentURI.spec;
   if( isLocalUrlOrWarnMe() )
   {
     (dispatcherCall)?navigate(getLocalWebServerUrl()+xmltype+href.substring(getLocalWebServerUrl().length, href.lastIndexOf('.') )):navigate(href.substring(0, href.lastIndexOf('.') ) + xmltype);
+  }
+}
+
+function getXML(xmltype)
+{
+  // Get an aspect of the internal data.
+  var href = gBrowser.currentURI.spec;
+  if( isLocalUrlOrWarnMe() )
+  {
+    navigate(getLocalWebServerUrl()+xmltype);
   }
 }
 

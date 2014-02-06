@@ -47,6 +47,22 @@
       </select>
     </match>
 <!-- ================================== -->
+<!-- skin transforms for importing into -->
+<!-- custom skins (FOR-1000)            -->
+<!-- ================================== -->
+    <match pattern="transform.skin.*.css.*">
+      <select>
+        <location src="{properties:skins-dir}/{1}/css/{2}.xslt"/>
+        <location src="{forrest:forrest.context}/skins/{1}/css/{2}.xslt"/>
+      </select>
+    </match>
+    <match pattern="transform.skin.*.*.*">
+      <select>
+        <location src="{properties:skins-dir}/{1}/xslt/{2}/{3}.xsl"/>
+        <location src="{forrest:forrest.context}/skins/{1}/xslt/{2}/{3}.xsl"/>
+      </select>
+    </match>
+<!-- ================================== -->
 <!-- utility transforms                 -->
 <!-- ================================== -->
     <match pattern="transform.xml.xml-doctype-stripped">
@@ -85,6 +101,9 @@
     <match pattern="transform.linkmap.linkmap-relativized">
       <location src="{forrest:forrest.stylesheets}/relativize-linkmap.xsl" />
     </match>
+    <match pattern="transform.xml.xml-xpointer-attributes">
+      <location src="{forrest:forrest.stylesheets}/replace-xpointer-attributes.xsl" />
+    </match>
 <!--
       FIXME: strip remaining i18n elements and attributes.
       workaround for http://issues.apache.org/jira/browse/FOR-592
@@ -93,7 +112,8 @@
       <location src="{forrest:forrest.stylesheets}/strip-i18n-remains.xsl" />
     </match>
 <!--
-      FIXME: strip_namespace is because this bug: http://issues.apache.org/bugzilla/show_bug.cgi?id=35348
+      FIXME: strip_namespace is because this bug:
+      https://issues.apache.org/jira/browse/COCOON-1529
     -->
     <match pattern="transform.xml.xml-namespace-stripped">
       <location src="{forrest:forrest.context}/skins/common/xslt/html/strip_namespaces.xsl" />
@@ -102,13 +122,19 @@
       <location src="{forrest:forrest.stylesheets}/declare-broken-site-links.xsl" />
     </match>
 <!-- ================================== -->
-<!-- aggregate transforms                 -->
+<!-- exslt transforms                   -->
 <!-- ================================== -->
-    <match pattern="transform-aggregate.*.*">
-      <location src="{forrest:forrest.stylesheets}/aggregates/{1}-to-{2}.xsl" />
-    </match>
+     <match pattern="transform-exslt/**">
+       <location src="{forrest:forrest.stylesheets}/exslt/{1}"/>
+     </match>
+<!-- ================================== -->
+<!-- aggregate transforms               -->
+<!-- ================================== -->
     <match pattern="transform-aggregate.linkmap.relativized-linkmap">
       <location src="{forrest:forrest.stylesheets}/aggregates/relativize-split-linkmap.xsl" />
+    </match>
+    <match pattern="transform-aggregate.*.*">
+      <location src="{forrest:forrest.stylesheets}/aggregates/{1}-to-{2}.xsl" />
     </match>
     <match pattern="transform.old-skinconf.new-skinconf">
       <location src="{forrest:forrest.stylesheets}/upgrade-skinconf.xsl" />

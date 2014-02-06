@@ -27,9 +27,9 @@
 <!ENTITY ds '0.90'>
 <!ENTITY dt '0.9-dev'>
 <!ENTITY n '0.10'>
-<!ENTITY nd 'docs_0_10'>
-<!ENTITY np 'plugins_0_10'>
-<!ENTITY ns '0.10'>
+<!ENTITY nd 'docs_0_100'>
+<!ENTITY np 'plugins_0_100'>
+<!ENTITY ns '0.100'>
 <!ENTITY nt '0.10-dev'>
 <!ENTITY p '0.7'>
 <!ENTITY pd 'docs_0_70'>
@@ -118,13 +118,15 @@
         The votes of the PMC will <a href="#vote">decide</a> whether the product is fit for release.
       </p>
       <p>
-        The RM makes all the <a href="#decisionRM">decisions</a> regarding the actual preparations and the
+        The RM makes all the <a href="#decisionRM">calls</a> regarding the actual preparations and the
         doing of the release. Many projects have the same release manager for
         years.
       </p>
       <p>
         The RM could do the job alone, which enables speedy process. There are
-        not actually many tasks where assistants can help. However it is a good
+        not actually many tasks where assistants can help with the release
+        itself (other than with the pre-release tasks and testing).
+        However it is a good
         idea to have an assistant so as to pass on the knowledge, to help
         document the process, and to perceive potential flaws. More than one
         assistant would probably hinder.
@@ -134,8 +136,8 @@
         especially to prepare the first release candidate and to finalise the release.
       </p>
       <p>
-        The RM should be comfortable with using SVN and be familiar with the ASF
-        hardware, with the distribution mirror system, and with ASF release
+        The RM should be comfortable with using SVN and be familiar
+        with the distribution mirror system, and with ASF release
         procedures. Also need to be a quick decision-maker and able to find and solve
         issues on the spot. It would be nice if others help to solve last minute
         issues, but don't expect it.
@@ -154,11 +156,18 @@
         job begins after the project is ready to do the release.
       </p>
       <ul>
-        <li>The project updates the Roadmap to schedule the realistic Issues.</li>
-        <li>The project made good progress towards fixing the Blockers and applying the outstanding patches.</li>
+        <li>The project updates the <a href="site:bugs/filters">Roadmap</a>
+          to schedule the realistic Issues.
+          Be brutal. If these issues have not been fixed by now, then it is
+          quite okay to re-schedule them to delay until the next development
+          version. See example emails from the lead-up to previous releases.
+        </li>
+        <li>The project made good progress towards fixing the Blockers
+          and applying the outstanding <a href="site:bugs/filters">patches</a>.
+        </li>
         <li>The documentation content is ready.</li>
         <li>Plugins have been reviewed and deployed as necessary. Some perhaps need to
-          go through a release process. This should happen independently of the release process.
+          go through a release process. This should happen independently of the core release process.
         </li>
         <li>Supporting products (e.g. Ant, Xerces) should have been updated well before this
                 stage. Do not attempt such upgrades too close to the release, as it
@@ -168,13 +177,14 @@
                 happen before the release.
                 Some examples from last time: FOR-911, FOR-868, FOR-865, FOR-855, FOR-644.
               </li>
-        <li><p>
+        <li>
             Relevant changes are listed in the site-author/status.xml and
-            contributers have been attributed. Other changes are listed in the
+            contributors have been attributed. Other changes are listed in the
             various plugins/status.xml files.
-          </p></li>
+            See <a href="https://issues.apache.org/jira/browse/FOR-865">FOR-865</a>
+        </li>
         <li>Add relevant information to the
-                <a href="http://issues.apache.org/jira/browse/FOR-868">upgrading notes</a>.
+                <a href="https://issues.apache.org/jira/browse/FOR-868">upgrading notes</a>.
               </li>
         <li><p>
             Major changes are listed in the site-author/status.xml using the
@@ -193,6 +203,8 @@
                 about how to create and manage PGP keys, and see the notes about
                 encouraging a strong
                 <a href="http://www.apache.org/dev/release-signing.html#web-of-trust">web of trust</a>.
+                See these tools to ensure that signatures and keys are okay:
+                <a href="http://people.apache.org/~henkp/checker/sig.html">pgp signature checker</a>
               </li>
         <li>
           Be familiar with our <a href="site:guidelines/voting">voting guidelines</a> and
@@ -228,12 +240,13 @@
                             href="http://issues.apache.org/jira/browse/FOR-853">FOR-853</a>.
             Look at
             <a
-                            href="http://www.mail-archive.com/dev@forrest.apache.org/msg02310.html">msg02310.html</a>
+                            href="http://www.mail-archive.com/dev@forrest.apache.org/msg02310.html" rel="nofollow">msg02310.html</a>
             for an example of such a message.
           </p></li>
         <li><p>
             Start discussion on Java-Version to use for compiling and testing
-            the release. If necessary, alter the build.compiler.vm value in main/build.xml and plugins/build.xml
+            the release. If necessary, alter the build.compiler.vm value in main/build.xml and plugins/build.xml and in various other files.
+            Conduct a text search for the old version.
           </p></li>
       </ol>
     </section>
@@ -249,7 +262,9 @@
             If you have never done a release before or need to refresh your
             memory, read all about Apache releases in general at
             <a href="http://www.apache.org/dev/#releases">http://www.apache.org/dev/#releases</a>
-            (note that these documents change often). Make sure any assistants
+            and
+            <a href="http://incubator.apache.org/guides/releasemanagement.html">Apache Incubator</a>.
+            Note that these documents change often. Make sure any assistants
             have read and understood this as well.
           </p></li>
         <li>As discussed above, be sure that you have plenty of time and energy.
@@ -283,40 +298,46 @@
       <title>Preparing the Release Plan</title>
       <p>
         Prepare the Release Plan to define the corner stones of the coming
-        release. Deciding the dates and timing that suits everybody will be
-        difficult. However, try to be careful about holiday periods and try to
+        release. Deciding the dates and timing that suits everybody might be
+        difficult. Try to be careful about holiday periods and try to
         find timing that is good to attract the most people to help.
       </p>
-      <ol>
-        <li>Java-Version to test this release</li>
-        <li>Start of code-freeze</li>
-        <li>Start of test-period</li>
-        <li>Vote on release candidate</li>
-        <li>Optional creation of release candidate #2 (when there are bugs)</li>
-        <li>Start of test-period #2</li>
-        <li>Vote on release candidate #2</li>
-        <li>Scheduled release Date</li>
-      </ol>
       <p>
-        Use the email template
-        <a href="propose_release_plan.txt">propose_release_plan.txt</a> to write
-        and propose your plan, then call for a quick vote on the release plan on
-        the dev list.
+        Some items are:
       </p>
+      <ul>
+        <li>Java-Version to test this release</li>
+        <li>The Release Manager</li>
+        <li>Date for end of vote on release plan</li>
+        <li>Date for create release candidate and start of testing period</li>
+        <li>Optional creation of release candidate #2 (when there are bugs)</li>
+        <li>Date for end of vote on the final release candidate</li>
+        <li>Scheduled release date</li>
+      </ul>
       <p>
         Remind people about our <a href="site:guidelines/voting">voting guidelines</a> and
         <a href="site:guidelines/actions">release actions</a>.
       </p>
+      <p>
+        See past release plans as examples:
+<!--
+        <a href="http://s.apache.org/jI?action=display">0.8</a>
+-->
+        <a href="http://s.apache.org/jI">0.8</a>
+            |
+        <a href="http://s.apache.org/VL5">0.7</a>
+      </p>
       <note>
-        There are various reasons for voting on the Release Plan, e.g. makes
-        people aware that a code-freeze is about to happen; encourage them to
-        get involved with the release; ensure that the date is suitable and
+        There are various reasons for voting on the Release Plan, e.g.
+        draws attention to the release process; encourages people to get
+        involved; prompts people get their changes committed; ensures that the
+        date is suitable and
         people will be around to test and then vote on the actual release. This
         ensures that it is the PMC as a whole that prepares and issues the
         release, rather than an individual. Such procedures give us the
         protection accorded by the ASF being a corporation. See a good
-        discussion <a href="http://marc.theaimsgroup.com/?t=114296877800003">in
-        the archives</a>.
+        discussion on the cocoon-dev list:
+        <a href="http://marc.theaimsgroup.com/?t=114296877800003" rel="nofollow">Re: Voting on releases?</a>
       </note>
     </section>
     <section id="PrepCodeBase">
@@ -329,12 +350,12 @@
             Ensure that there are no license issues. The committers and PMC
             would have been continually monitoring this. There are some tools to
             assist with scanning for issues. See
-            <a href="../../roles.html#legal-monitor">further information</a>.
+            <a href="site:tasks/legal-monitoring">further information</a>.
           </p></li>
         <li><p>
             Ensure that the line-endings and svn:eol-style property are correct
             for all files. See
-            <a href="../../roles.html#subversion-monitor">further
+            <a href="site:tasks/subversion-monitoring">further
             information</a>.
           </p></li>
         <li>
@@ -365,17 +386,17 @@
           <p>
             If a plugin has a locationmap.xml file or uses "lm:" references in
             its *.xmap, then it is using locationmap. See
-            <a href="site:buildPlugin">buildPlugin</a>.
+            <a href="site:buildPlugin">How to Build a Plugin</a>.
           </p></li>
         <li>
                   Ensure that plugins descriptors in both core and whiteboard are up-to-date.
                 </li>
         <li><p>
             Ensure that all relevant plugins have been deployed to plugins/&d;/
-            (see other notes at plugins/RELEASE_PROCESS.txt).
+            (see other notes at <a href="site:buildPlugin/release">How to Build a Plugin</a>).
           </p>
-          <fixme author="fso">
-            Check and integrate plugins/RELEASE_PROCESS.txt as a new document.
+          <fixme author="open">
+            Check and integrate the documents referenced in that howto.
           </fixme></li>
       </ol>
     </section>
@@ -444,10 +465,12 @@
         these changes after the code-freeze, but do not publish to the website
         until after the release.
       </p>
-      <fixme author="dc">
+      <fixme author="open">
         We definitely need to use automated version number strings where possible.
         It is too easy to miss some, as we did with 0.8 release. 
         We have a set of core xml entities available.
+        Also see the source xml for this document, which utilises entities to
+        manage the version numbers between releases.
       </fixme>
       <ol>
         <li><p>
@@ -511,7 +534,7 @@
                 Remove the "-dev" from the current &lt;release&gt; tag, and set
                 the anticipated release date. Remove the "-dev" from the text intro.
               </p></li>
-        <li>Validate status.xml (e.g. with xmllint).</li>
+        <li>Validate status.xml (e.g. with <code>'xmllint'</code> or with <code>'forrest validate-status'</code>).</li>
         <li>
           <p>
             Create a new directory as a stub for the next section of development docs. 
@@ -530,15 +553,27 @@ svn copy &dd;/upgrading.xml &nd;
             a text like:
           </p>
           <source>
- Apache Forrest &d; was released on &rdate;.
+ Apache Forrest &d; was released on ## YYYY-MM-DD ##.
  [### Add some important new features ###]</source></li>
+        <li>
+          In the top-level quickstart <code>$FORREST_HOME/index.html</code>
+        </li>
         <li>Ensure that the documentation is building properly, do 'cd site-author; forrest'.
           Fix any linking errors. Review changes.html to ensure section numbering.</li>
-        <li>Edit the site-author/content/doap.xml to add the new release date.</li>
+        <li>Edit the site-author/content/doap.xml to add the new release date.
+          Note that we have copies <a href="https://issues.apache.org/jira/browse/FOR-1210">FOR-1210</a>.
+        </li>
         <li><p>
             Edit the forrest/site-author/content/xdocs/mirrors.html and adjust
             all version-specific content.
+            In the "Verify" section near the end, add the name of the Release Manager
+            and the PGP key Id used to sign the release.
           </p></li>
+        <li>Search (e.g. with find and grep) to ensure that no version numbers
+          have been missed. Sometimes people add more hard-coded version numbers
+          since the last release. If you find any, then add them to the list
+          above (or better still, automate them).
+        </li>
         <li>Commit all of the above changes after the code-freeze has started
                   in the next section.</li>
       </ol>
@@ -605,7 +640,7 @@ to:
  &lt;property name="forrest.version" value="&n;"/>
 </source>
               <note>
-                This is deliberately a major version up. It is assumed that
+                This is deliberately a major version up. It is assumed that new
                 plugins will be developed against the next version of Forrest.
                 Individual plugins can override this property in their own build
                 files.
@@ -675,7 +710,7 @@ xpi/chrome/content/contents.rdf, line 25: chrome:displayName="ForrestBar &d;"/>
             This will be used later for the svn log message when the branch is
             created. Also it is helpful for ensuring that no new commits have
             been made, i.e. people forgetting the code freeze. From here on
-            watch the svn@ list.
+            carefully watch the svn@ list.
           </p></li>
         <li><p>Cleanup your working copy to remove any extra files.</p>
           <source>
@@ -693,6 +728,23 @@ svn status --no-ignore</source>
                           to generate the release candidate packages.
                         </li>
           </ul></li>
+        <li>
+          <p>Tag SVN trunk for the release candidate:</p>
+          <source>svn copy -m "Create tag forrest_###xy###_rc# from trunk" \
+  https://svn.apache.org/repos/asf/forrest/trunk \
+  https://svn.apache.org/repos/asf/forrest/tags/forrest_###xy###_rc#</source>
+          <p>
+            where '###xy###' is a compact (without the dots) form of the version
+            number (e.g. 04, 041, 05).
+            <br/>
+            where 'rc#' is the release candidate number (e.g. rc1, rc2).
+          </p>
+          <p>
+            See
+            <a href="http://svn.apache.org/repos/asf/forrest/tags/">http://svn.apache.org/repos/asf/forrest/tags/</a>
+            for examples of past tags.
+          </p>
+        </li>
         <li>Unpack and test the relevant archive in a fresh new directory.
                   No point getting people to test if it is broken. You need this for your own testing and vote anyway.
                   Be sure to set FORREST_HOME and PATH properly for this release candidate location
@@ -780,6 +832,7 @@ where
                   Remember that there is still a code freeze, so don't let people be tempted to fix other
                   minor stuff or add some pet new feature that they have neglected. That can easily
                   introduce new problems.
+                  Of course be as accommodating as possible.
                 </li>
         <li>If necessary start again with <a href="#BuildDist">Building the packages</a> and build another
           release candidate. Remember to do 'svn update' first and to record the
@@ -906,6 +959,9 @@ svn mkdir plugins/&n;</source></li>
           <source>&lt;property name="version" value="&nt;"/></source></li>
         <li>Edit version numbers in plugins/build.xml</li>
         <li>Edit version numbers in tools/forrestbar</li>
+        <li>Increment the version numbers in the head of the xml source of this
+          "How_to_release" document. These are xml entities which display the
+          various version numbers in this document.</li>
         <li><p>
             Update the .htaccess file to redirect /docs/dev/ to the next
             version, and do other changes noted in the .htaccess file. See
@@ -915,10 +971,15 @@ svn mkdir plugins/&n;</source></li>
             Need to go through .htaccess and clean up.
           </fixme></li>
         <li>
-                  Update the release version number and release date in xdocs/index.xml
-                  and site-author/content/doap.xml
-                </li>
-        <li>Commit all of the above changes.</li>
+          Update the release version number and release date in xdocs/index.xml
+          and site-author/content/doap.xml files.
+          Note that we have copies <a href="https://issues.apache.org/jira/browse/FOR-1210">FOR-1210</a>.
+        </li>
+        <li>
+          Commit all of the above changes. Either wait for the cronjob,
+          or ssh in and do 'svn up'
+        </li>
+        <li>Remember that there is then a one hour rsync delay.</li>
         <li>Send email to the dev list to remind people about the new docs set &nd;
         and that we don't update &pd; set. Also remind about the new release branch
         of svn. See example email from the 0.8 release.</li>
@@ -929,16 +990,22 @@ svn mkdir plugins/&n;</source></li>
       <p>
         In this phase we'll upload the new Release, wait for it to be available
         on most mirror sites, publish the new website, then announce the release.
+      </p>
+      <p>
         The reason for waiting, is because when you send the announcement, most of
         the mirrors need to be up-to-date or your audience will grumble.
+        See various notes below, explaining the delays.
       </p>
       <note>
         During this phase there is a lot of waiting. While things are happening
         you can be doing some of the other tasks in this Upload section and in
-        the <a
-                    href="#cleanup">Cleanup</a> section.
+        the <a href="#cleanup">Cleanup</a> section.
       </note>
       <ol>
+        <li>
+          The signatures that were provided by people who voted +1
+          for the release may be appended to the *.asc file.
+        </li>
         <li><p>
             Use scp to upload the release: the *.tar.gz, the *.zip, the *.asc
             and *.md5 files, and the RELEASE-NOTES-&d;.txt to people.apache.org
@@ -949,6 +1016,10 @@ svn mkdir plugins/&n;</source></li>
             *'</code> then <code>'chmod g+w *'</code> in that directory.
             Each PMC member has a server account and belongs to the forrest
             group.
+          </p>
+          <p>
+            See these tools to ensure that signatures and keys are okay:
+            <a href="http://people.apache.org/~henkp/checker/sig.html">pgp signature checker</a>
           </p>
           <p>
             The process is documented at
@@ -977,7 +1048,7 @@ svn mkdir plugins/&n;</source></li>
           </p>
           <p>
             See <a href="http://www.apache.org/mirrors/">Status of mirrors</a>.
-            It is a very useful service and fun to watch. See the "age histogram"i
+            It is a very useful service and fun to watch. See the "age histogram"
             near the bottom.
           </p>
           <p>
@@ -1024,30 +1095,30 @@ svn mkdir plugins/&n;</source></li>
           </p>
           <p>
             See previous announcements for examples:
-            <a href="http://marc.info/?l=apache-announce&amp;m=117688881228702">0.8</a>
+            <a href="http://marc.info/?l=apache-announce&amp;m=117688881228702" rel="nofollow">0.8</a>
             |
-            <a href="http://marc.info/?l=xml-apache-announce&amp;m=111960678028211">0.7</a>
+            <a href="http://marc.info/?l=xml-apache-announce&amp;m=111960678028211" rel="nofollow">0.7</a>
             |
-            <a href="http://marc.info/?l=xml-apache-announce&amp;m=109784461425740">0.6</a>
+            <a href="http://marc.info/?l=xml-apache-announce&amp;m=109784461425740" rel="nofollow">0.6</a>
             |
-            <a href="http://marc.info/?l=xml-apache-announce&amp;m=106541447606765">0.5.1</a>
+            <a href="http://marc.info/?l=xml-apache-announce&amp;m=106541447606765" rel="nofollow">0.5.1</a>
             |
-            <a href="http://marc.info/?l=xml-apache-announce&amp;m=106352706005681">0.5</a>
+            <a href="http://marc.info/?l=xml-apache-announce&amp;m=106352706005681" rel="nofollow">0.5</a>
             |
-            <a href="http://marc.info/?l=jakarta-announce&amp;m=104510734501302">0.4</a>
+            <a href="http://marc.info/?l=jakarta-announce&amp;m=104510734501302" rel="nofollow">0.4</a>
             |
-            <a href="http://marc.info/?l=xml-apache-announce&amp;m=104399934113331">0.3</a>
+            <a href="http://marc.info/?l=xml-apache-announce&amp;m=104399934113331" rel="nofollow">0.3</a>
             |
-            <a href="http://marc.info/?l=xml-apache-announce&amp;m=103746673310573">0.2</a>
+            <a href="http://marc.info/?l=xml-apache-announce&amp;m=103746673310573" rel="nofollow">0.2</a>
           </p>
         </li>
         <li><p>
             Do the Freshmeat announcement:
-            <a href="http://freshmeat.net/projects/forrest/">http://freshmeat.net/projects/forrest/</a>
+            <a href="http://freshmeat.net/projects/forrest/" rel="nofollow">http://freshmeat.net/projects/forrest/</a>
           </p></li>
         <li>
                   Update the release information at our
-                  <a href="http://en.wikipedia.org/wiki/Apache_Forrest">Wikipedia</a> page.
+                  <a href="http://en.wikipedia.org/wiki/Apache_Forrest" rel="nofollow">Wikipedia</a> page.
                </li>
       </ol>
     </section>
@@ -1061,6 +1132,10 @@ svn mkdir plugins/&n;</source></li>
             Remove old dist files from the /www/www.apache.org/dist/forrest/
             directory. They have already been automatically archived at
             archive.apache.org/dist/forrest/
+          </p>
+          <p>
+            See Henk's cleanup
+            <a href="http://people.apache.org/~henkp/tlps/">notes</a>.
           </p></li>
           <li>Tidy up any "site:v&c;" references. These will refer to old documentation
             that will be removed at the next release. Especially status.xml file will

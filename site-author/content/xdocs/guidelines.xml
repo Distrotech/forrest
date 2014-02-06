@@ -108,7 +108,9 @@ limitations under the License.
     <section id="pmc">
       <title>Project Management Committee (PMC)</title>
       <p>
-        The Apache Forrest project was established in January 2002 and became a
+        The Apache Forrest project was
+        <link href="index.html#status">established</link>
+        in January 2002 and became a
         top-level project in May 2004. The Project Management Committee (PMC)
         was created by a
         <link href="http://www.apache.org/foundation/records/minutes/2004/board_minutes_2004_05_26.txt">resolution</link>
@@ -194,8 +196,9 @@ limitations under the License.
         chair to the board. Ultimately, however, it is the board's
         responsibility who it chooses to appoint as the PMC chair. See further
         explanation of the role of the chair in the
+        <link href="http://www.apache.org/foundation/how-it-works.html#pmc">How-it-works</link> document and the 
         <link href="http://www.apache.org/foundation/bylaws.html">ASF
-        Bylaws</link> and the
+        Bylaws</link> (section 6.3) and the
         <link href="http://www.apache.org/dev/pmc.html#chair">PMC FAQ</link>
       </p>
       <section id="report">
@@ -349,7 +352,7 @@ limitations under the License.
           </td>
           </tr>
           <tr>
-            <td><strong>Lazy majority</strong>
+            <td><strong>Lazy majority (majority consensus)</strong>
             </td>
             <td>
             A lazy majority vote requires 3 binding +1 votes and more binding +1
@@ -652,11 +655,12 @@ limitations under the License.
         making changes to patches prior to their commit, nor mean that the
         committer can be careless. Rather it is a policy for decision-making.
       </p>
-      <p>
+      <p id="manage-licenses">
         There is an important issue where both developers and committers need to
         pay special attention: "licenses". We must not introduce licensing
         conditions that go beyond the terms of the <link href="ext:asl">Apache
-        License</link>. If such issues do creep in to our repository, then we
+        License</link>. (See also ASF <link href="ext:asf-legal">legal</link>.)
+        If such issues do creep in to our repository, then we
         must work as quickly as possible to address it and definitely before the
         next release.
       </p>

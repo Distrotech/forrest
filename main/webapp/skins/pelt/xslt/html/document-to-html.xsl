@@ -20,13 +20,14 @@ This stylesheet contains templates for converting documentv11 to HTML.  See the
 imported document-to-html.xsl for details.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:import href="../../../common/xslt/html/document-to-html.xsl"/>
+  <xsl:import href="lm://transform.skin.common.html.document-to-html"/>
   <xsl:template match="document">
     <meta-data>
       <xsl:apply-templates select="header/meta"/>
       <xsl:apply-templates select="header/link"/>
     </meta-data>
     <div id="content">
+      <xsl:apply-templates select="body" mode="carry-body-attribs"/>
       <div id="skinconf-printlink"/>
       <div id="skinconf-xmllink"/>
       <div id="skinconf-podlink"/>
@@ -91,7 +92,7 @@ imported document-to-html.xsl for details.
   <xsl:template match="@id">
     <xsl:apply-imports/>
   </xsl:template>
-  <xsl:template match="section"><a name="{generate-id()}"/>
+  <xsl:template match="section">
     <xsl:apply-templates select="@id"/>
     <xsl:variable name = "level" select = "count(ancestor::section)+1" />
     <xsl:choose>
@@ -140,8 +141,17 @@ imported document-to-html.xsl for details.
   </xsl:template>
   <xsl:template match="figure">
     <xsl:apply-templates select="@id"/>
-    <div style="text-align: center;" id="{@id}">
-      <img src="{@src}" alt="{@alt}" class="figure"  id="{@id}">
+    <div style="text-align: center;">
+        <xsl:if test="@id">
+	  <xsl:attribute name="id">
+	    <xsl:value-of select="@id"/>
+	  </xsl:attribute>
+        </xsl:if>
+      <img src="{@src}" alt="{@alt}" class="figure">
+        <xsl:if test="@id">
+          <xsl:attribute name="id">
+          <xsl:value-of select="@id"/>-figure</xsl:attribute>
+        </xsl:if>
         <xsl:if test="@height">
           <xsl:attribute name="height">
             <xsl:value-of select="@height"/>

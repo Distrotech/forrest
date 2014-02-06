@@ -18,20 +18,242 @@
 <!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
 <document>
   <header>
-    <title>Upgrading to Apache Forrest 0.9-dev</title>
+    <title>Upgrading to Apache Forrest 0.9</title>
   </header>
   <body>
     <section id="introduction">
       <title>Introduction</title>
-      <note>
-        This is the <strong>development</strong> version of Apache Forrest.
-        Developers can obtain it from the <a href="site:version-control">Subversion</a>
-        repository.
-        See the notes for obtaining and <a href="site:build">Building
-        Forrest</a>.
-      </note>
-      <p>This is a placeholder document for the new version.</p>
+      <p>
+        This page describes some changes to Apache Forrest that affect people
+        who are upgrading to the 0.9 version. If you have other issues, then
+        please discuss on either the
+        <a href="site:mail-lists/forrest-dev">dev</a> or
+        <a href="site:mail-lists/forrest-user">user</a> mailing lists. As more
+        experience is gained, this document will be updated.
+      </p>
+      <p>
+        (If you are upgrading from a version prior to 0.8 then you will need to
+        see the notes for the previous upgrade.)
+      </p>
     </section>
-<!-- FIXME: need to bring back some sections from the 0.8 version, temporarily removed -->
+    <section id="new">
+      <title>New Features</title>
+      <p>
+        The following list shows some of the key new features.
+        See also the <code>RELEASE-NOTES</code> document that was provided with
+        the release package. For the full list
+        of changes, see the main <a href="site:changes">change log</a> and also
+        for each plugin.
+      </p>
+      <ul>
+        <li>
+          Our packaged Apache Cocoon is upgraded, along with various other
+          important supporting products such as Apache Xerces and Apache Xalan, etc.
+        </li>
+        <li>
+          The properties are supplemented by the new
+          <a href="site:properties">Properties</a> system.
+        </li>
+        <li>Java 1.5</li>
+      </ul>
+      <p>
+        Some new initial plugins are in the "whiteboard". See the entries in the
+        <a href="site:changes">change log</a> and see each plugin's
+        documentation and changes log. This includes the new Dispatcher. See
+        <a href="site:status-themes">Status of Themes: Skins and Dispatcher</a>.
+      </p>
+    </section>
+    <section id="jdk15">
+      <title>Java 1.5 (or newer) is required</title>
+      <p>
+        Java 1.5 (or newer) is required, starting with this Forrest 0.9 version.
+        For further information, see
+        <a href="site:v0.90//faq/requirements">FAQ</a>.
+      </p>
+    </section>
+    <section id="cocoon">
+      <title>Notes about Cocoon version</title>
+      <p>
+        Our packaged version of Apache Cocoon has been upgraded to use the
+        latest version of their stable 2.1 branch. This is a major step forward
+        for Forrest. It enables us to use a reliable and up-to-date Cocoon.
+        Forrest developers can again participate at Cocoon to fix issues or
+        develop new blocks. A number of major performance issues are already
+        fixed in this version.
+      </p>
+      <p>
+        In previous versions of Forrest we were using a development version of
+        Cocoon trunk (i.e. 2.2). A number of things happened which caused us to
+        fall out of synchronisation with Cocoon. They started using Maven as a
+        build system, which took a long time to settle down. In turn that meant
+        that Apache Gump could not perform continuous integration, which shut
+        Forrest off. At the same time Cocoon trunk was making technical advances
+        which changed some of the ways that Forrest interacts with Cocoon. In
+        particular the command-line interface which Forrest uses to build a
+        complete static site.
+        See other notes via <a href="http://issues.apache.org/jira/browse/FOR-1017">FOR-1017</a>.
+      </p>
+      <p>
+        Cocoon-2.1 is closer to our stalled version of Cocoon-2.2 than the
+        current head of Cocoon-2.2 trunk.
+      </p>
+      <p>
+        Note that this move does not preclude us from future updates to other
+        versions of Cocoon or even to another xml processing framework.
+      </p>
+      <p>
+        If you want to use your own version of Cocoon-2.1, for example to add
+        another Cocoon Block or to enhance a particular existing block, then
+        see the notes in the <code>$FORREST_HOME/etc/cocoon_upgrade</code>
+        directory.
+      </p>
+
+      <section id="cocoon-upgrade">
+        <title>Cocoon upgrade issues</title>
+        <p>
+          There are only two minor issues for those upgrading from the previous
+          version of Forrest:
+        </p>
+        <p>
+          When you first use this in your existing projects, there will probably
+          be a message about a certain cache item. On the second run all is well.
+          A way to avoid that would be to do 'forrest clean-work' in each of
+          your projects to remove the old Cocoon cache.
+        </p>
+        <p>
+          The configuration file is now at
+          <code>main/webapp/WEB-INF/cocoon.xconf</code>
+        </p>
+        <p>
+          Our previous version of Cocoon had a facility called "Running modes"
+          which enabled one set of a minimal group of properties for development
+          and a different set for production. This is not available in Cocoon-2.1
+          version. If you were using this feature, then simply move your defined
+          properties into the <code>main/webapp/WEB-INF/properties/core.properties</code>
+          file.
+        </p>
+      </section>
+    </section>
+    <section id="missing-symbols">
+      <title>Missing project symbols file in some projects</title>
+      <p>Users of 0.8, and developers with older 0.9-dev, who based their sites on 'forrest seed-basic' rather than 'forrest seed-sample' will be affected by <a href="https://issues.apache.org/jira/browse/FOR-1075">FOR-1075</a>. There was a partially implemented xml catalog with missing symbols file.
+      </p>
+      <p>
+        You would get the message:
+      </p>
+      <source>Failed to create InputSource (java.io.FileNotFoundException:
+.../src/documentation/resources/schema/symbols-project-v10.ent
+(No such file or directory)...</source>
+      <p>
+        This is just a warning message from the misconfigured xml entity catalog.
+        To silence it, simply copy the file from a new "seed-basic" site,
+        or more directly by
+        <code>cp $FORREST_HOME/main/fresh-site/src/documentation/resources/schema/symbols-project-v10.ent $PROJECT/src/documentation/resources/schema/symbols-project-v10.ent</code>
+      </p>
+      <p>
+        This "project symbols" ability using xml entities is useful in two ways.
+        To provide common symbols, words, and phrases, in your source documents
+        (added in v0.8 - <a href="site:faq/xml-entities">FAQ</a>).
+        To configure some Cocoon sitemap components
+        (added in v0.9 - <a href="site:faq/sitemap-entities">FAQ</a>).
+      </p>
+    </section>
+    <section id="pdf">
+      <title>Improved PDF output plugin</title>
+      <p>
+        Many plugins have been upgraded and there are some new plugins.
+        See the <a href="site:changes">Changes</a> and the <a href="site:pluginVersions/overview">Plugins</a>
+        documentation.
+      </p>
+      <p>
+        In particular, the PDF output plugin has many improvements, uses a newer Apache FOP etc.
+        It is much more configurable, See its plugin documentation.
+      </p>
+      <p>
+        However there is a minor, but annoying, problem.
+        See <a href="https://issues.apache.org/jira/browse/FOR-1077">FOR-1077</a>.
+        Forrest (via Cocoon) re-generates every document. Every PDF now gets differences
+        due to some internal metadata dates, even though its content might not have changed.
+        When the documentation set is deployed, e.g. via svn, these changed files will also
+        be deployed.
+      </p>
+      <p>
+        For the Forrest project website, we decided to stop (via skinconf.xml) using PDFs
+        for every page and do it only for some specific documents.
+      </p>
+      <p>
+        Remember that if you need to use an old version of any plugin, then it can be
+        specified in forrest.properties by appending the version number (e.g. "-0.2" or "-0.3")
+        to the required plugin name.
+      </p>
+    </section>
+    <section id="generated-id">
+      <title>Improved generated IDs for sections</title>
+      <p>
+        The conversion of xdoc sections to html will generate named anchors
+        for use with URI fragment identifiers.
+      </p>
+      <p>
+        Forrest utilises the @id attribute if it exists (ideal).
+        Otherwise it generates one utilising the "section/title" element.
+      </p>
+      <p>
+        With prior versions of Forrest, an extra automatic ID was always generated.
+        This now only happens if those other pieces are missing.
+      </p>
+      <p>
+        So when you first update your project's deployed html documentation, there will
+        be many changes removing those old superfluous named anchors
+        (e.g. <code>&lt;a name="N1000E"</code>).
+      </p>
+    </section>
+    <section id="docs">
+      <title>Notes about documentation</title>
+      <p>
+        After each release, the "Versioned Docs" are copied to form the new
+        "dev" set. Ideally the docs are then upgraded in readiness for the new
+        release. This has not been completed for recent releases. In particular
+        there are example snippets of sitemaps which have not yet been upgraded
+        to reflect the changes to the sitemaps and the separation of some core
+        stuff into plugins. See issues
+        <a href="https://issues.apache.org/jira/browse/FOR-546">FOR-546</a> and
+        <a href="https://issues.apache.org/jira/browse/FOR-922">FOR-922</a> and
+        others.
+      </p>
+    </section>
+    <section id="tips">
+      <title>General upgrade tips</title>
+      <p>
+        Synchronise your project's skinconf.xml and forrest.properties files:
+      </p>
+      <p>
+        Take advantage of the separation of concerns. In a new workspace, create
+        a fresh '<code>forrest seed</code>' site, then tweak its
+        forrest.properties and skinconf.xml until it reflects your old site.
+        When it is ready, replace your project's skinconf.xml and
+        forrest.properties files. Any remaining issues would concern other
+        aspects of your configuration, such as site.xml and your actual content.
+      </p>
+    </section>
+    <section id="project-sitemap">
+      <title>Remove project sitemap if not necessary</title>
+      <p>
+        It has come to our attention that some people have a
+        <a href="site:project-sitemap">project sitemap</a>
+        even though they are not using it. Such un-necessary sitemaps should be
+        removed to avoid maintenance issues.
+      </p>
+      <p>
+        If you do use a project sitemap, then pay attention to the 0.8 upgrade
+        instructions "<a href="site:upgrading_08">Forrest configuration simplification</a>".
+      </p>
+    </section>
+    <section>
+      <title>To be continued...</title>
+      <p>
+        ...as more issues are discovered/remembered :) Please send feedback to
+        the <a href="site:mail-lists/forrest-dev">mailing list</a>.
+      </p>
+    </section>
   </body>
 </document>

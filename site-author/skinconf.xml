@@ -34,7 +34,7 @@ See main/fresh-site/src/documentation/skinconf.xml for details.
 <!-- Disable the print link? If enabled, invalid HTML 4.0.1 -->
   <disable-print-link>true</disable-print-link>
 <!-- Disable the PDF link? -->
-  <disable-pdf-link>false</disable-pdf-link>
+  <disable-pdf-link>true</disable-pdf-link>
 <!-- Disable the xml source link? -->
 <!-- The xml source link makes it possible to access the xml rendition
     of the source frim the html page, and to have it generated statically.
@@ -71,8 +71,13 @@ See main/fresh-site/src/documentation/skinconf.xml for details.
   <favicon-url>favicon.ico</favicon-url>
 <!-- The following are used to construct a copyright statement -->
   <year inception="true">2002</year>
-  <vendor>The Apache Software Foundation.</vendor>
+  <vendor>The Apache Software Foundation. Licensed under Apache License 2.0</vendor>
   <copyright-link>http://www.apache.org/licenses/</copyright-link>
+<!-- Optional text trademark statement below the copyright statement -->
+  <trademark-statement>
+    Apache, Apache Forrest, the Apache feather logo, and the Apache Forrest
+    logos are trademarks of The Apache Software Foundation.
+  </trademark-statement>
 <!-- Some skins use this to form a 'breadcrumb trail' of links.
     If you don't want these, then set the attributes to blank.
     The DTD purposefully requires them.
@@ -80,8 +85,8 @@ See main/fresh-site/src/documentation/skinconf.xml for details.
     (if the skin supports it).
   -->
   <trail>
-    <link1 name="apache" href="http://www.apache.org/"/>
-    <link2 name="forrest" href="http://forrest.apache.org/"/>
+    <link1 name="Apache Software Foundation" href="http://www.apache.org/"/>
+    <link2 name="Apache Forrest" href="http://forrest.apache.org/"/>
     <link3 name="" href=""/>
   </trail>
 <!-- Configure the TOC, i.e. the Table of Contents.
@@ -99,49 +104,49 @@ See main/fresh-site/src/documentation/skinconf.xml for details.
   <motd>
     <motd-option pattern="index.html" starts-with="true">
       <motd-page location="page">
-        18 April 2007 Forrest-0.8 released: Features the Locationmap.
+        7 February 2011 : Forrest-0.9 released
       </motd-page>
       <motd-page-url>http://forrest.apache.org/mirrors.cgi</motd-page-url>
     </motd-option>
-    <motd-option pattern="docs_0_90">
-      <motd-title>v0.9-dev</motd-title>
+    <motd-option pattern="docs_0_100">
+      <motd-title>v0.10-dev</motd-title>
       <motd-page location="both">
-        This is documentation for development version v0.9-dev
+        This is documentation for development version v0.10-dev
+      </motd-page>
+      <motd-page-url>http://forrest.apache.org/versions/</motd-page-url>
+    </motd-option>
+    <motd-option pattern="plugins_0_100">
+      <motd-title>v0.10-dev</motd-title>
+      <motd-page location="both">
+        This is documentation for development version v0.10-dev
+      </motd-page>
+      <motd-page-url>http://forrest.apache.org/pluginDocs/</motd-page-url>
+    </motd-option>
+    <motd-option pattern="docs_0_90">
+      <motd-title>v0.9</motd-title>
+      <motd-page location="both">
+        This is documentation for current version v0.9
       </motd-page>
       <motd-page-url>http://forrest.apache.org/versions/</motd-page-url>
     </motd-option>
     <motd-option pattern="plugins_0_90">
-      <motd-title>v0.9-dev</motd-title>
+      <motd-title>v0.9</motd-title>
       <motd-page location="both">
-        This is documentation for development version v0.9-dev
+        This is documentation for current version v0.9
       </motd-page>
       <motd-page-url>http://forrest.apache.org/pluginDocs/</motd-page-url>
     </motd-option>
     <motd-option pattern="docs_0_80">
       <motd-title>v0.8</motd-title>
       <motd-page location="both">
-        This is documentation for current version v0.8
+        This is documentation for past version v0.8
       </motd-page>
       <motd-page-url>http://forrest.apache.org/versions/</motd-page-url>
     </motd-option>
     <motd-option pattern="plugins_0_80">
       <motd-title>v0.8</motd-title>
       <motd-page location="both">
-        This is documentation for current version v0.8
-      </motd-page>
-      <motd-page-url>http://forrest.apache.org/pluginDocs/</motd-page-url>
-    </motd-option>
-    <motd-option pattern="docs_0_70">
-      <motd-title>v0.7</motd-title>
-      <motd-page location="both">
-        This is documentation for past version v0.7
-      </motd-page>
-      <motd-page-url>http://forrest.apache.org/versions/</motd-page-url>
-    </motd-option>
-    <motd-option pattern="plugins_0_70">
-      <motd-title>v0.7</motd-title>
-      <motd-page location="both">
-        This is documentation for current version v0.7
+        This is documentation for past version v0.8
       </motd-page>
       <motd-page-url>http://forrest.apache.org/pluginDocs/</motd-page-url>
     </motd-option>
@@ -149,6 +154,7 @@ See main/fresh-site/src/documentation/skinconf.xml for details.
   <extra-css>
 #footer a { color: #0F3660; }
 #footer a:visited { color: #009999; }
+.copyright { font-size: 0.8em }
   </extra-css>
   <colors>
 <!-- These values are used for the generated CSS files. -->
@@ -264,21 +270,14 @@ See main/fresh-site/src/documentation/skinconf.xml for details.
     <credit>
       <name>thanks to ASF, thanks from ASF</name>
       <url>http://www.apache.org/foundation/thanks.html</url>
-      <image>images/icon.png</image>
-      <width>26</width>
-      <height>22</height>
+      <image>images/apache-thanks.png</image>
+      <width>88</width>
+      <height>31</height>
     </credit>
     <credit box-location="alt2">
-      <name>ApacheCon US 2007</name>
-      <url>http://us.apachecon.com/</url>
-      <image>http://apache.org/ads/ApacheCon/2007-usa-125x125.png</image>
-      <width>125</width>
-      <height>125</height>
-    </credit>
-    <credit box-location="alt2">
-      <name>ApacheCon Europe 2008</name>
-      <url>http://eu.apachecon.com/</url>
-      <image>http://apache.org/ads/ApacheCon/2008-europe-125x125.png</image>
+      <name>ApacheCon</name>
+      <url>http://www.apache.org/events/current-event.html</url>
+      <image>http://www.apache.org/events/current-event-125x125.png</image>
       <width>125</width>
       <height>125</height>
     </credit>

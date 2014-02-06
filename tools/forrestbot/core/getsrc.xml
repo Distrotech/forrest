@@ -53,11 +53,11 @@
       tag="${getsrc.cvs.tag}"
       failonerror="true"
       />
-    <echo>Loading ${build.cvsmodule-dir}/${getsrc.cvs.module}/forrest.properties..</echo>
+    <echo level="info">Loading ${build.cvsmodule-dir}/${getsrc.cvs.module}/forrest.properties..</echo>
     <loadproperties srcFile="${build.cvsmodule-dir}/${getsrc.cvs.module}/forrest.properties"/>
     <loadproperties srcFile="${forrest.home}/main/webapp/default-forrest.properties"/>
 <!-- only the project.content-dir directory -->
-    <echo>
+    <echo level="info">
 <![CDATA[<cvs cvsRoot=":pserver:${getsrc.cvs.user}@${getsrc.cvs.host}:${getsrc.cvs.root}"
       package="${getsrc.cvs.module}/${project.content-dir}"
       dest="${build.cvsmodule-dir}"
@@ -77,33 +77,25 @@
       <fileset dir="${build.cvsmodule-dir}/${getsrc.cvs.module}"/>
     </copy>
   </target>
-  <taskdef resource="taskdef.properties">
-    <classpath>
-<!-- non-recursive doesn't work from 0.8 stable -->
-      <pathelement location="${bot.home}/lib/jsvn-0.9-dev.jar"/>
-    </classpath>
-  </taskdef>
 <!-- default values -->
   <property name="getsrc.svn.url" value=""/>
   <property name="getsrc.svn.revision" value="HEAD"/>
   <property name="build.svn-dir"    location="work/svn"/>
+  <property name="deploy.svn.user" value="${env.USER}"/>
   <target name="getsrc.svn" description="FB: Get source from an SVN repository">
-<!-- non-recursive; just to get forrest.properties -->
-    <echo>svn: ${getsrc.svn.url} -> ${build.svn-dir}/${ant.project.name}</echo>
-    <svncheckout repositoryUrl="${getsrc.svn.url}"
-      destination="${build.svn-dir}/${ant.project.name}"
-      revision="${getsrc.svn.revision}"
-      failonerror="true"
-      recursive="false"/>
-    <echo>Loading ${build.svn-dir}/${ant.project.name}/forrest.properties..</echo>
+    <echo level="info">svn: ${getsrc.svn.url} -> ${build.svn-dir}/${ant.project.name}</echo>
+    
+    <exec executable="svn" dir="." failonerror="true">
+      <arg value="co"/>
+      <arg value="--username"/>
+      <arg value="${deploy.svn.user}"/>
+      <arg value="${getsrc.svn.url}"/>
+      <arg value="${build.svn-dir}/${ant.project.name}"/>
+    </exec>
+    
+    <echo level="info">Loading ${build.svn-dir}/${ant.project.name}/forrest.properties..</echo>
     <loadproperties srcFile="${build.svn-dir}/${ant.project.name}/forrest.properties"/>
     <loadproperties srcFile="${forrest.home}/main/webapp/default-forrest.properties"/>
-<!-- only the project.content-dir directory -->
-    <echo>svn: ${getsrc.svn.url}/${project.content-dir} -> ${build.svn-dir}/${ant.project.name}/${project.content-dir}</echo>
-    <svncheckout repositoryUrl="${getsrc.svn.url}/${project.content-dir}"
-      destination="${build.svn-dir}/${ant.project.name}/${project.content-dir}"
-      revision="${getsrc.svn.revision}"
-      failonerror="true"/>
     <copy todir="${build.work-dir}" overwrite="true">
       <fileset dir="${build.svn-dir}/${ant.project.name}"/>
     </copy>

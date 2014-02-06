@@ -38,6 +38,7 @@
           - a veritable goldmine of Forrest-specific information.</li>
         <li>Contribution <link href="contrib.html#tips">notes and tips</link>
         (e.g. a clear subject heading; being patient).</li>
+        <li><link href="http://www.apache.org/foundation/public-archives.html">ASF Public Forum Archive Policy</link></li>
       </ul>
       <p>
         If you are posting about a problem that you are having, it will aid in
@@ -65,12 +66,15 @@
         burnt out. See FAQ about <link href="site:faq/jobs">job offers</link>.
       </p>
     </section>
-    <section>
+    <section id="Lists">
       <title>Lists</title>
       <p>
-        See ASF-wide <link href="http://www.apache.org/foundation/mailinglists.html">notes</link>
-        about expectations, subscription instructions, nettiquette, etc. for all mailing lists.
-        Be aware of the <link href="http://www.apache.org/foundation/public-archives.html">Public Forum Archive Policy</link>.
+        See ASF-wide
+        <link href="http://www.apache.org/foundation/mailinglists.html">notes</link>
+        about expectations, subscription instructions, nettiquette, etc. for all
+        mailing lists. Be aware of the
+        <link href="http://www.apache.org/foundation/public-archives.html">Public
+        Forum Archive Policy</link>.
       </p>
       <table>
         <tr>
@@ -93,15 +97,19 @@
             <br/>
             <br/><link href="http://dir.gmane.org/gmane.text.xml.forrest.user">Gmane</link>
             <br/>
-            <br/><link href="http://forrest.markmail.org/search/list:org.apache.forrest.user">MarkMail</link>
+            <br/><link href="http://www.gossamer-threads.com/lists/forrest/user/">Gossamer Threads</link>
+            <br/>
+            <br/><link href="http://markmail.org/list/org.apache.forrest.user">MarkMail</link>
           </td>
           <td>Any general issue related to the day-to-day use of Forrest.</td>
           <td>This is a subscriber-only list (in an effort to stop spam), so you must join before you can post.</td>
           <td>
-          user-subscribe&lt;at&gt;forrest.apache.org<br/>
-          user-unsubscribe&lt;at&gt;forrest.apache.org<br/>
-          user-help&lt;at&gt;forrest.apache.org
-        </td>
+            <ul>
+              <li>user-subscribe &lt;at&gt; forrest.apache.org</li>
+              <li>user-unsubscribe &lt;at&gt; forrest.apache.org</li>
+              <li>user-help &lt;at&gt; forrest.apache.org</li>
+            </ul>
+          </td>
         </tr>
         <tr>
           <td>
@@ -116,18 +124,23 @@
             <br/>
             <br/><link href="http://dir.gmane.org/gmane.text.xml.forrest.devel">Gmane</link>
             <br/>
-            <br/><link href="http://forrest.markmail.org/search/list:org.apache.forrest.dev">MarkMail</link>
+            <br/><link href="http://www.gossamer-threads.com/lists/forrest/dev/">Gossamer Threads</link>
+            <br/>
+            <br/><link href="http://markmail.org/list/org.apache.forrest.dev">MarkMail</link>
           </td>
           <td>Any issue related to development and enhancement.</td>
           <td>Postings from non-subscribers are moderated.
               <br/>Read-only NNTP access to forrest-dev is available through the
-              <link href="news://news.gmane.org:119/gmane.text.xml.forrest.devel">gmane.text.xml.forrest.devel  newsgroup</link>
+              Gmane
+              <link href="news://news.gmane.org:119/gmane.text.xml.forrest.devel">text.xml.forrest.devel  newsgroup</link>
           </td>
           <td>
-          dev-subscribe&lt;at&gt;forrest.apache.org<br/>
-          dev-unsubscribe&lt;at&gt;forrest.apache.org<br/>
-          dev-help&lt;at&gt;forrest.apache.org
-        </td>
+            <ul>
+              <li>dev-subscribe &lt;at&gt; forrest.apache.org</li>
+              <li>dev-unsubscribe &lt;at&gt; forrest.apache.org</li>
+              <li>dev-help &lt;at&gt; forrest.apache.org</li>
+            </ul>
+          </td>
         </tr>
         <tr>
           <td>
@@ -142,15 +155,19 @@
             <br/>
             <br/><link href="http://dir.gmane.org/gmane.text.xml.forrest.cvs">Gmane</link>
             <br/>
-            <br/><link href="http://forrest.markmail.org/search/list:org.apache.forrest.svn">MarkMail</link>
+            <br/><link href="http://www.gossamer-threads.com/lists/forrest/svn/">Gossamer Threads</link>
+            <br/>
+            <br/><link href="http://markmail.org/list/org.apache.forrest.svn">MarkMail</link>
           </td>
           <td>Receive notifications on changes in the Forrest codebase in the SVN repository.</td>
           <td>Replies go to dev@forrest</td>
           <td>
-          svn-subscribe&lt;at&gt;forrest.apache.org<br/>
-          svn-unsubscribe&lt;at&gt;forrest.apache.org<br/>
-          svn-help&lt;at&gt;forrest.apache.org
-        </td>
+            <ul>
+              <li>svn-subscribe &lt;at&gt; forrest.apache.org</li>
+              <li>svn-unsubscribe &lt;at&gt; forrest.apache.org</li>
+              <li>svn-help &lt;at&gt; forrest.apache.org</li>
+            </ul>
+          </td>
         </tr>
         <tr>
           <td>
@@ -163,15 +180,19 @@
             <br/>
             <br/><link href="http://www.mail-archive.com/site-svn@forrest.apache.org/">mail-archive.com</link>
             <br/>
-            <br/><link href="http://forrest.markmail.org/search/list:org.apache.forrest.site-svn">MarkMail</link>
+            <br/><link href="http://www.gossamer-threads.com/lists/forrest/site-svn/">Gossamer Threads</link>
+            <br/>
+            <br/><link href="http://markmail.org/list/org.apache.forrest.site-svn">MarkMail</link>
           </td>
           <td>Receive notifications on changes to the generated Forrest site SVN.</td>
           <td>Replies go to dev@forrest</td>
           <td>
-          site-svn-subscribe&lt;at&gt;forrest.apache.org<br/>
-          site-svn-unsubscribe&lt;at&gt;forrest.apache.org<br/>
-          site-svn-help&lt;at&gt;forrest.apache.org
-        </td>
+            <ul>
+              <li>site-svn-subscribe &lt;at&gt; forrest.apache.org</li>
+              <li>site-svn-unsubscribe &lt;at&gt; forrest.apache.org</li>
+              <li>site-svn-help &lt;at&gt; forrest.apache.org</li>
+            </ul>
+          </td>
         </tr>
       </table>
     </section>

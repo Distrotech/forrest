@@ -26,6 +26,7 @@ Redirect /pluginDocs/dev http://forrest.apache.org/pluginDocs/plugins_0_90
 RedirectMatch ^/faq(.*) http://forrest.apache.org/docs_0_90/faq$1
 RedirectMatch ^/docs/faq(.*) http://forrest.apache.org/docs_0_90/faq$1
 RedirectMatch ^/changes(.*) http://forrest.apache.org/docs_0_90/changes$1
+RedirectMatch ^(.*)/upgrading_09(.*) http://forrest.apache.org/docs_0_90/upgrading_09$2
 
 Options -MultiViews
 
@@ -34,6 +35,7 @@ Redirect /docs http://forrest.apache.org/docs_0_80
 Redirect /howto http://forrest.apache.org/docs_0_80/howto
 
 # Some moved documents
+RedirectMatch ^/roles(.*) http://forrest.apache.org/tasks$1
 
 # handle all DTDs etc.
 <Files ~ "\.(dtd|mod)$">

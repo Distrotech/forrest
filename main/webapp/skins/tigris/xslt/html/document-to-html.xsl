@@ -28,7 +28,7 @@ and tabs (tab-to-menu.xsl) to generate the final HTML.
 
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:import href="../../../common/xslt/html/document-to-html.xsl"/>
+  <xsl:import href="lm://transform.skin.common.html.document-to-html"/>
   <xsl:template match="document">
     <meta-data>
       <xsl:apply-templates select="header/meta"/>
@@ -118,7 +118,7 @@ and tabs (tab-to-menu.xsl) to generate the final HTML.
   <xsl:template match="link | jump | fork | source | anchor | icon | code | figure | @id" >
     <xsl:apply-imports/>
   </xsl:template>
-  <xsl:template match="section"><a name="{generate-id()}"/>
+  <xsl:template match="section">
     <xsl:apply-templates select="@id"/>
     <xsl:variable name = "level" select = "count(ancestor::section)+1" />
     <xsl:choose>

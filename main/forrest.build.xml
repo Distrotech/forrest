@@ -25,7 +25,7 @@ FORREST SITE BUILDER
 <project default="site" basedir="." name="forrest">
   <property environment="env" />
   <property name="forrest.home"               location="${env.FORREST_HOME}" />
-  <property name="forrest.version"            value="0.9-dev"/>
+  <property name="forrest.version"            value="0.9"/>
   <property name="forrest.lib-dir"            location="${forrest.home}/lib"/>
   <property name="forrest.core.lib-dir"       location="${forrest.lib-dir}/core"/>
   <property name="forrest.endorsed.lib-dir"   location="${forrest.lib-dir}/endorsed"/>
@@ -44,9 +44,12 @@ FORREST SITE BUILDER
   <import file="targets/context.xml"/>
   <import file="targets/seed.xml"/>
   <description>
-    *=======================================================* | Forrest Site
-    Builder | *=======================================================* Call
-    this through the 'forrest' command
+          *=======================================================* 
+          |                  Forrest Site Builder                 | 
+          |                 Apache Forrest ${forrest.version}                |
+          |                                                       |
+          |        Call this through the 'forrest' command        |
+          *=======================================================*
   </description>
   <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
     <classpath>
@@ -110,6 +113,7 @@ FORREST SITE BUILDER
     <property name="catalog"     location="${project.home}/${project.catalog}" />
     <property name="skins-dir"   location="${project.home}/${project.skins-dir}" />
     <property name="skinconf"    location="${project.home}/${project.skinconf}" />
+    <property name="stylesheets-dir" location="${project.home}/${project.stylesheets-dir}" />
     <property name="conf-dir"    location="${project.home}/${project.conf-dir}" />
     <property name="lib-dir"     location="${project.home}/${project.lib-dir}" />
     <property name="classes-dir" location="${project.home}/${project.classes-dir}" />
@@ -181,7 +185,7 @@ FORREST SITE BUILDER
     <if>
       <isset property="project.new-skin-name"/>
       <then>
-        <echo>
+        <echo level="warning">
 -- Warning --
 skin "${project.skin}" no longer exists, the skin named
 "${project.new-skin-name}" will be automatically used instead.
@@ -206,7 +210,7 @@ and so remove this warning.
         <equals arg1="${project.skin}" arg2="crust"/>
       </or>
       <then>
-        <echo>
+        <echo level="warning">
 -- Warning --
 Using skin "${project.skin}" which is deprecated.
 Please migrate to one of the new skins listed in forrest.properties.
@@ -218,7 +222,7 @@ The skin that most likely resembles these ones is called 'pelt'.
     <antcall target="echo-settings" />
 <!-- Gather some build information about this Forrest instance,
       to be used later by Cocoon. -->
-    <echo file="${project.temp-dir}/build-info.xml">&lt;info>
+    <echo level="info" file="${project.temp-dir}/build-info.xml">&lt;info>
   &lt;project-skin>${project.skin}&lt;/project-skin>
   &lt;forrest-version>${forrest.version}&lt;/forrest-version>
 &lt;/info>
@@ -279,13 +283,18 @@ The skin that most likely resembles these ones is called 'pelt'.
         <equals arg1="${ant.java.version}" arg2="1.1"/>
         <equals arg1="${ant.java.version}" arg2="1.2"/>
         <equals arg1="${ant.java.version}" arg2="1.3"/>
+        <equals arg1="${ant.java.version}" arg2="1.4"/>
       </or>
       <then>
-        <fail>Java 1.4 or higher is required; found Java ${ant.java.version} in ${java.home}</fail>
+        <fail>Java 1.5 or higher is required; found Java ${ant.java.version} in ${java.home}</fail>
       </then>
     </if>
-    <echo message="This is apache-forrest-${forrest.version}"/>
-    <echo message="Using Java ${ant.java.version} from ${java.home}"/>
+    <echo level="info" message="This is apache-forrest-${forrest.version}"/>
+    <echo level="info" message="Using Java ${ant.java.version} from ${java.home}"/>
+    <echo level="info" message="Using ${ant.version} from ${ant.home}"/>
+  </target>
+  <target name="diagnostics" depends="init" description="Show the Ant diagnostics">
+    <diagnostics/>
   </target>
 <!-- Sets up properties and filters -->
   <target name="init" depends="check-java-version, init-props, init-skins, init-plugins">
@@ -295,13 +304,21 @@ The skin that most likely resembles these ones is called 'pelt'.
 <!-- ===============================================================
        Echo's the settings if requested. [-Dforrest.echo=true]
        =============================================================== -->
-  <target name="echo-settings" if="forrest.echo">
+
+  <target name="echo-settings-condition" if="forrest.echo">
+    <property name="forrest.echo.istrue" value="${forrest.echo}"/>
+    <condition property="echo.true">
+      <istrue value="${forrest.echo.istrue}"/>
+    </condition>
+  </target>
+
+  <target name="echo-settings" depends="echo-settings-condition" if="echo.true">
     <loadfile property="echo-settings-message" srcFile="${forrest.core}/var/echo-settings-message.txt">
       <filterchain>
         <expandproperties/>
       </filterchain>
     </loadfile>
-    <echo>${echo-settings-message}</echo>
+    <echo level="info">${echo-settings-message}</echo>
   </target>
 <!-- ===============================================================
        Set class-path.
@@ -380,13 +397,13 @@ The skin that most likely resembles these ones is called 'pelt'.
   <target name="run_custom_jetty"
    if="custom_jetty_config"
    description="Run Jetty with configuration file found in the project">
-    <echo>
+    <echo level="info">
   Note: Use Ctrl-C to stop the Jetty server
     </echo>
     <if>
       <os family="dos"/>
       <then>
-        <echo>
+        <echo level="info">
          ... and reply 'n' and press [Enter] 
   	     when asked about aborting the batch!
       </echo>
@@ -414,13 +431,13 @@ The skin that most likely resembles these ones is called 'pelt'.
   </target>
   <target name="run_default_jetty"
    description="Run Jetty with configuration file found in Forrest">
-    <echo>
+    <echo level="info">
   Note: Use Ctrl-C to stop the Jetty server
     </echo>
     <if>
       <os family="dos"/>
       <then>
-        <echo>
+        <echo level="info">
          ... and reply 'n' and press [Enter] 
   	     when asked about aborting the batch!
       </echo>
@@ -456,11 +473,11 @@ The skin that most likely resembles these ones is called 'pelt'.
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
   <target name="init-proxy" if="proxy.host" unless="proxy.already.set">
-    <echo>Using proxy : ${proxy.host}:${proxy.port}</echo>
+    <echo level="info">Using proxy : ${proxy.host}:${proxy.port}</echo>
     <if>
       <isset property="proxy.user"/>
       <then>
-        <echo>Proxy connection : xxxxxx/xxxxxx (confidential)</echo>
+        <echo level="info">Proxy connection : xxxxxx/xxxxxx (confidential)</echo>
         <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}" proxyuser="${proxy.user}" proxypassword="${proxy.password}"/>
       </then>
       <else>

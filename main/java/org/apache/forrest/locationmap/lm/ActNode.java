@@ -27,6 +27,7 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.ServiceSelector;
 import org.apache.cocoon.acting.Action;
+import org.apache.cocoon.components.CocoonComponentManager;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolver;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolverFactory;
@@ -36,7 +37,21 @@ import org.apache.cocoon.environment.SourceResolver;
 
 
 /**
- * Locationmap select statement.
+ * Locationmap act statement.
+ * 
+ * <p>
+ * The &lt;act&gt; element has one optional <code>type</code> attribute
+ * which identifies the type the associated <code>{@link Action}<code> should act.
+ * If no <code>type</code> attribute is used the default action is used.
+ * </p>
+ * 
+ * Action statements can contain <code>&lt;act&gt;</code>,
+ * <code>&lt;select&gt;</code> and <code>&lt;location&gt;</code>
+ * child statements.
+ * 
+ * <p>
+ * Action nodes can be parametrized using <code>&lt;parameter&gt;</code> child elements.
+ * </p>
  */
 public final class ActNode extends AbstractNode {
     
@@ -80,14 +95,6 @@ public final class ActNode extends AbstractNode {
         catch (PatternException e) {
             throw new ConfigurationException("unable to resolve action 'src' attribute");
         }
-//        try {
-//            m_src = VariableResolverFactory.getResolver(
-//                    configuration.getAttribute("src"), super.m_manager);
-//        } catch (PatternException e) {
-//            final String message = "Illegal pattern syntax at for location attribute 'src'" +
-//                    " at " + configuration.getLocation();
-//            throw new ConfigurationException(message,e);
-//        }
         try {
             final ServiceSelector selectors = (ServiceSelector) super.m_manager.lookup(Action.ROLE + "Selector");
             m_action = (Action) selectors.select(m_type);
@@ -126,15 +133,12 @@ public final class ActNode extends AbstractNode {
         }
         m_nodes = (AbstractNode[]) nodes.toArray(new AbstractNode[nodes.size()]);
     }
-    public void service(ServiceManager manager) throws ServiceException {
-        //FIXME: Determine whether this is really necessary anymore.
-        this.resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
-    }
+    
     /* (non-Javadoc)
      * @see org.apache.forrest.locationmap.lm.AbstractNode#locate(java.util.Map, org.apache.cocoon.components.treeprocessor.InvokeContext)
      */
     public String locate(Map objectModel, InvokeContext context) throws Exception {
-        this.resolver = (SourceResolver)m_manager.lookup(SourceResolver.ROLE);
+        this.resolver = (SourceResolver)CocoonComponentManager.getCurrentEnvironment();
         Parameters parameters = resolveParameters(context,objectModel);
         Redirector redirector = context.getRedirector();
         m_src = m_varResolver.resolve(context,objectModel);
@@ -156,18 +160,4 @@ public final class ActNode extends AbstractNode {
         return null;
     }
     
-//    public String locate(Map om, InvokeContext context) throws Exception {
-//        
-//        Parameters parameters = resolveParameters(context,om);
-//        for (int i = 0; i < m_nodes.length; i++) {
-//            String location = m_nodes[i].locate(om,context);
-//            if (m_action.act().select(location,om,parameters)) {
-//                if (getLogger().isDebugEnabled()) {
-//                    getLogger().debug("selected: " + location);
-//                }
-//                return location;
-//            }
-//        }
-//        return null;
-//    }
 }

@@ -36,8 +36,8 @@ Section handling
   <xsl:param name="notoc"/>
   <xsl:param name="path"/>
 <!-- <xsl:include href="split.xsl"/> -->
-  <xsl:include href="dotdots.xsl"/>
-  <xsl:include href="pathutils.xsl"/>
+  <xsl:include href="lm://transform.xml.dotdots"/>
+  <xsl:include href="lm://transform.xml.pathutils"/>
 <!-- Path to site root, eg '../../' -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
@@ -91,8 +91,14 @@ Section handling
   </xsl:template>
 <!-- Generate a <a name="..."> tag for an @id -->
   <xsl:template match="@id">
-    <xsl:if test="normalize-space(.)!=''"><a name="{.}"/>
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="normalize-space(.) != ''">
+        <a name="{.}"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <a name="{generate-id()}"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   <xsl:template match="section">
 <!-- count the number of section in the ancestor-or-self axis to compute
@@ -215,9 +221,14 @@ Section handling
   <xsl:template match="figure">
     <xsl:apply-templates select="@id"/>
     <div align="center">
-      <xsl:copy-of select="@id"/>
+      <xsl:if test="@id">
+        <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+      </xsl:if>
       <img class="figure">
-        <xsl:copy-of select="@height | @width | @src | @alt | @id"/>
+        <xsl:copy-of select="@height | @width | @src | @alt"/>
+	<xsl:if test="@id">
+          <xsl:attribute name="id"><xsl:value-of select="@id"/>-figure</xsl:attribute>
+        </xsl:if>
       </img>
     </div>
   </xsl:template>
@@ -370,5 +381,13 @@ Section handling
       <xsl:copy-of select="@id"/>
       <xsl:apply-templates/>
     </xsl:copy>
+  </xsl:template>
+  <xsl:template match="body" mode="carry-body-attribs">
+    <xsl:apply-templates select="@*" mode="carry-body-attribs"/>
+  </xsl:template>
+  <xsl:template match="@class" mode="carry-body-attribs">
+    <xsl:attribute name="class">
+      <xsl:value-of select="."/>
+    </xsl:attribute>
   </xsl:template>
 </xsl:stylesheet>

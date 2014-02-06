@@ -40,6 +40,10 @@ in a 'forrest seed-sample" site.
 <year inception="true">2004</year>
 <vendor>The Apache Software Foundation.</vendor>
 <copyright-link>http://www.apache.org/licenses/</copyright-link>
+<trademark-statement>
+  Apache, Apache Forrest, the Apache feather logo, and the Apache Forrest
+  logos are trademarks of The Apache Software Foundation.
+</trademark-statement>
 <trail>
   <link1 name="Apache Forrest" href="http://forrest.apache.org/"/>
   <link2 name="Plugins" href="http://forrest.apache.org/pluginDocs/"/>
@@ -95,6 +99,20 @@ in a 'forrest seed-sample" site.
     <name>Built with Apache Forrest</name>
     <url>http://forrest.apache.org/</url>
     <image>images/built-with-forrest-button.png</image>
+    <width>88</width>
+    <height>31</height>
+  </credit>
+  <credit>
+    <name>Built with Apache Cocoon</name>
+    <url>http://cocoon.apache.org/</url>
+    <image>images/built-with-cocoon.gif</image>
+    <width>88</width>
+    <height>31</height>
+  </credit>
+  <credit>
+    <name>thanks to ASF, thanks from ASF</name>
+    <url>http://forrest.apache.org/thanks.html</url>
+    <image>images/apache-thanks.png</image>
     <width>88</width>
     <height>31</height>
   </credit>

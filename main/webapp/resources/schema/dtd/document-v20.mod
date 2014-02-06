@@ -64,10 +64,10 @@ NOTES:
         ID is required.
 -->
 <!ENTITY % common.att 'id                     ID              #IMPLIED
-         class                  NMTOKEN         #IMPLIED
+         class                  CDATA           #IMPLIED
          xml:lang               NMTOKEN         #IMPLIED'>
 <!ENTITY % common-idreq.att 'id                     ID              #REQUIRED
-         class                  NMTOKEN         #IMPLIED
+         class                  CDATA           #IMPLIED
          xml:lang               NMTOKEN         #IMPLIED'>
 <!-- xml:space attribute ===============================================
         Indicates that the element contains white space
@@ -117,6 +117,9 @@ NOTES:
 <!ENTITY % link.att 'href      CDATA             #REQUIRED
                      title     CDATA             #IMPLIED
                      rel       CDATA             #IMPLIED'>
+
+<!ENTITY % xinclude-ns.att 'xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude"'>
+
 <!-- =============================================================== -->
 <!-- General definitions -->
 <!-- =============================================================== -->
@@ -131,7 +134,7 @@ NOTES:
 <!-- Content definitions -->
 <!-- =============================================================== -->
 <!ENTITY % local.inline "">
-<!ENTITY % link-content.mix "%text;|%markup;|%special-inline; %local.inline;">
+<!ENTITY % link-content.mix "%text;|%markup;|%special-inline;|xi:include %local.inline;">
 <!ENTITY % content.mix "%link-content.mix;|%links;">
 <!-- ==================================================== -->
 <!-- Phrase Markup -->
@@ -196,6 +199,7 @@ NOTES:
 <!ELEMENT map ( area+)>
 <!ATTLIST map
   name CDATA #IMPLIED
+  %common.att;
 >
 <!ELEMENT area EMPTY>
 <!ATTLIST area
@@ -219,6 +223,14 @@ NOTES:
 <!ATTLIST acronym
   title CDATA #REQUIRED
   %common.att; 
+>
+
+<!ELEMENT xi:include EMPTY>
+<!ATTLIST xi:include
+  parse     (text|xml)  "xml"
+  href      CDATA       #REQUIRED
+  xpointer  CDATA       #IMPLIED
+  encoding  CDATA       #IMPLIED
 >
 
 <!-- =============================================================== -->
@@ -270,7 +282,7 @@ NOTES:
 <!ENTITY % cell.span 'colspan CDATA "1"
          rowspan CDATA "1"'>
 <!-- Table element -->
-<!ELEMENT table (caption?, tr+)>
+<!ELEMENT table (caption?, (tr | xi:include)+)>
 <!ATTLIST table
   %common.att; 
 >
@@ -366,6 +378,7 @@ NOTES:
 <!ELEMENT document (header, body, footer?)>
 <!ATTLIST document
   %common.att; 
+  %xinclude-ns.att;
 >
 <!-- ==================================================== -->
 <!-- Header -->
@@ -420,11 +433,11 @@ NOTES:
 <!-- ==================================================== -->
 <!ENTITY % local.sections "">
 <!ENTITY % sections "section %local.sections;">
-<!ELEMENT body (%sections; | %blocks;)+>
+<!ELEMENT body (%sections; | %blocks; | xi:include)+>
 <!ATTLIST body
   %common.att; 
 >
-<!ELEMENT section (title, (%sections; | %blocks;)*)>
+<!ELEMENT section (title, (%sections; | %blocks; | xi:include)*)>
 <!ATTLIST section
   %common.att; 
 >

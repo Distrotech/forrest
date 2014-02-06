@@ -28,6 +28,13 @@
         provides our testing and demonstration area. It is managed by Apache
         Forrest committers. The material is intended for developer use only.
       </p>
+      <fixme author="">
+        These notes are for our previous zone on the Solaris OS.
+        Much of this documentation will just need some tweaking.
+        The new zone (jail)
+        <a href="http://www.apache.org/dev/freebsd-jails.html">documentation</a>
+        needs to be referenced.
+      </fixme>
     </section>
     <section id="configuration">
       <title>Configuration</title>
@@ -39,7 +46,6 @@
       <p>
         <strong>config</strong>
       </p>
-<!-- FIXME: create better layout for notes, just dumping text inside source elements for now. -->
       <source>
 creates /export/home/config ... $CONFIG
 directories /forrestbot-*/ are the forrestbot homes, see below.
@@ -84,6 +90,12 @@ Hold them here until building properly.
       <p>
         Various local software is installed in <code>/export/opt/</code> (not
         managed with SVN) ...
+      </p>
+      <p>
+        Our Apache httpd server is managed using
+        <a href="http://www.apache.org/dev/solaris-zones.html#apache2_smf">Solaris SMF</a>
+        
+       so should always come back up automatically after a failure or machine reboot.
       </p>
       <section id="s-forrest">
         <title>Forrest</title>
@@ -133,7 +145,6 @@ cd main
 forrestbot operating with trunk.
 builds various sites automatically, triggered via cron.
 Configuration files and the generated results are at $DOC_ROOT/ft/
-FIXME: The web interface is coming soon.
 </source>
       <p>
         <strong>$CONFIG/forrestbot-trunk-stable</strong>
@@ -163,7 +174,7 @@ Configuration files and the generated results are at $DOC_ROOT/fts/
       </p>
       <p>
         As requested by that infra doc, keep our zone info up-to-date (see
-        https://svn.apache.org/repos/asf/infrastructure/trunk/docs/helios/zones.txt).
+        https://svn.apache.org/repos/infra/infrastructure/trunk/docs/machines/helios/zones.txt).
       </p>
       <p>
        We have minimally configured our zone. See some other projects' config ideas, e.g.
@@ -171,8 +182,21 @@ Configuration files and the generated results are at $DOC_ROOT/fts/
         and those of us on the Cocoon PMC can see their config in their "pmc" SVN.
       </p>
       <p>
-        Monitor the infrastructure@ mailing list for changes to the 
+        Monitor the infrastructure@
+        <a href="http://www.apache.org/dev/infra-mail.html">mail lists</a>
+        for changes to the 
         <a href="http://www.apache.org/dev/machines.html#helios">zones machine</a>.
+      </p>
+      <p>
+        Keep an eye on the status of 'helios' via the
+        <a href="http://apache.org/dev/#status">monitoring</a> service.
+      </p>
+      <p>
+        Occasionally the "SSL server certificate" will change for svn.apache.org
+        server. Monitor the infrastructure and committers mail lists, and see
+        infra
+        <a href="http://www.apache.org/dev/version-control.html#cert">notes</a>
+        about this topic.
       </p>
       <p>
         If you think that you need to contact
@@ -185,17 +209,7 @@ Configuration files and the generated results are at $DOC_ROOT/fts/
         Keep an occasional eye on $CONFIG/update-forrest-trunk.log This is
         the output of the cronjob to do svn update to trunk and re-build.
       </p>
-      <p>
-        FIXME: Start apache2 on boot (using new Solaris init.d replacement
-        called smf). At the moment we need to realise that it is down and
-        manually restart as per http://www.apache.org/dev/solaris-zones.html
-        Also it seems that /var/run/apache2 is wiped out on reboot, so need to
-        mkdir again.
-      </p>
-      <source>
-sudo mkdir /var/run/apache2
-sudo /usr/apache2/bin/apachectl -k start
-</source>
+
       <section id="admin-user">
         <title>User administration</title>
         <p>
@@ -217,7 +231,7 @@ sudo /usr/apache2/bin/apachectl -k start
       <title>Other notes</title>
       <ul>
         <li>See some other discussion in the thread
-          <a href="http://marc.info/?l=forrest-dev&amp;m=111717382712670">Re: zone for testing forrest</a></li>
+          <a href="http://marc.info/?l=forrest-dev&amp;m=111717382712670" rel="nofollow">Re: zone for testing forrest</a></li>
       </ul>
     </section>
   </body>

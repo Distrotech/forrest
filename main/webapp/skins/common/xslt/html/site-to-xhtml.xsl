@@ -148,6 +148,10 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           </xsl:otherwise>
         </xsl:choose>
         All rights reserved.
+        <xsl:if test="$config/trademark-statement">
+          <br />
+          <xsl:value-of select="$config/trademark-statement"/>
+        </xsl:if>
         <script language="JavaScript" type="text/javascript"><![CDATA[<!--
           document.write(" - "+"Last Published: " + document.lastModified);
           //  -->]]></script>
@@ -391,5 +395,19 @@ along with all other "link" elements. -->
         <xsl:value-of select="$year"/>
       </xsl:if>
     </xsl:if>
+  </xsl:template>
+  <xsl:template name="carry-body-attribs">
+    <!-- <div id="content"/> is used to carry attribs from XDocs to 
+          final HTML -->
+    <xsl:apply-templates 
+      select="//div[@id='content']/@*" mode="carry-body-attribs"/>
+  </xsl:template>
+  <xsl:template match="@id" mode="carry-body-attribs">
+    <!-- Ignore @id -->
+  </xsl:template>
+  <xsl:template match="@class" mode="carry-body-attribs">
+    <xsl:attribute name="class">
+      <xsl:value-of select="."/>
+    </xsl:attribute>
   </xsl:template>
 </xsl:stylesheet>

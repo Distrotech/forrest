@@ -40,25 +40,12 @@
         website.
       </p>
       <p>
-        See other notes for the Documentation Coordinator
-        <a href="site:roles">role</a>.
+        See other notes for the Documentation Coordination
+        <a href="site:tasks">tasks</a>.
       </p>
     </section>
     <section id="forrestbot-local">
       <title>Updating the site with a local forrestbot</title>
-      <p>
-        Do once, create $FORREST_HOME/deploy.svn.settings file. These
-        credentials are needed by forrestbot so that it can do your 'svn add'
-        and 'svn commit' etc. to the forrest/site/ repository. The
-        deploy.svn.settings file looks like:
-      </p>
-      <source>
-<![CDATA[<?xml version="1.0"?>
-<project>
-    <property name="deploy.svn.user" value="myApacheUsername"/>
-    <property name="deploy.svn.password" value="myPassword"/>
-</project>]]>
-      </source>
       <p>
         Generating and publishing the main docs is very easy using a local
         forrestbot:
@@ -67,15 +54,24 @@
 forrest -f publish.xml build
 forrest -f publish.xml deploy</source>
       <p>
+        Note: if your system username is not the same as your "svn username"
+        then provide a "deploy.svn.settings" file as explained at
+        <code>$FORREST_HOME/etc/publishing_our_site.txt</code>
+      </p>
+      <p>
         This builds the documentation locally then deploys it by committing it
         to the
-        <a href="https://svn.apache.org/repos/asf/forrest/site">forrest/site
+        <a href="http://svn.apache.org/repos/asf/forrest/site">forrest/site
         SVN</a>. Then a cronjob on the server will automatically publish it.
-        However, if instant turnaround is required, then do this:
+        However, if quicker turnaround is required, then do this:
       </p>
       <source>ssh people.apache.org
 cd /www/forrest.apache.org
 svn update</source>
+      <p>
+        See more detailed <a href="site:forrestbot-svn">explanation</a> of this
+        procedure.
+      </p>
       <p>
         Publishing documentation for a particular plugin is done by:
       </p>
@@ -102,21 +98,7 @@ $FORREST_HOME/tools/ant/bin/ant deploy-docs</source>
 <![CDATA[
                 To publish from trunk/site-author/
                 
-                Do once:
-                # Create $FORREST_HOME/deploy.svn.settings file. These credentials
-                # are needed by forrestbot so that it can do your 'svn add'
-                # and 'svn commit' etc. to the forrest/site/ repository.
-                # The deploy.svn.settings file looks like:
-                <?xml version="1.0"?>
-                <project>
-                    <property name="deploy.svn.user" value="myApacheUsername"/>
-                    <property name="deploy.svn.password" value="myPassword"/>
-                </project>
-                
-                
                 # Make changes to sources, and then test, then commit.
-                # Best to wait on committing the source changes until
-                # you have built and reviewed the docs.
 
                 # Please, please, ensure valid xml docs. Errors will be
                 # reported during the 'build' phase if you don't.
@@ -142,10 +124,6 @@ $FORREST_HOME/tools/ant/bin/ant deploy-docs</source>
                 ----------------------
                 Note: The first time that you deploy, it will need to do
                 a long svn checkout first.
-                
-                FIXME: That commit message technique does not work.
-                The second word is treated as an ant target to be called.
-                Just leave it out and forrestbot will use a default message.
                  ]]>
       </source>
       <p>
@@ -153,8 +131,9 @@ $FORREST_HOME/tools/ant/bin/ant deploy-docs</source>
       </p>
       <p>
         Note that forrestbot does not remove docs from the forrest/site SVN
-        (FOR-392). So need to manually delete: 'cd /svn/forrest/site; svn delete
-        oldDoc'. Then remove it from the forrestbot work directories: 'cd
+        (FOR-392). So need to manually delete:
+        '<code>svn delete https://svn.apache.org/repos/asf/forrest/site/.../oldDoc</code>'
+        and then remove it from the forrestbot work directories: 'cd
         $FORREST_HOME/site-author; rm build/forrest-docs/oldDoc; rm
         work/svn-deploy/forrest-docs/oldDoc'.
       </p>
@@ -172,6 +151,13 @@ diff -rq build/forrest-docs work/svn-deploy/forrest-docs | grep -v "\.svn" | gre
         menu additions or MOTD changes that affect old "versioned docs")
         then see the note in conf/cli.xconf about temporarily not excluding
         old "docs_*" patterns.
+      </p>
+      <p>
+        If there have been changes to tools/forrestbar then need to follow the
+        instructions there to build it. Then copy its build/forrestbar.xpi to
+        site-author/content/xdocs/tools/forrestbar.xpi and commit that. Then run
+        forrestbot to build and deploy the site, or alternatively for a quick
+        fix, just commit it to forest/site/tools (which is what forrestbot would do).
       </p>
     </section>
   </body>

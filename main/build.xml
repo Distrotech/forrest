@@ -43,9 +43,9 @@
     <property name="build.compiler.deprecation" value="on"/>
     <property name="build.compiler.nowarn"      value="on"/>
     <property name="build.compiler.type"        value="classic"/>
-    <property name="build.compiler.vm"          value="1.4"/>
+    <property name="build.compiler.vm"          value="1.5"/>
     <property name="name" value="apache-forrest"/>
-    <property name="forrest.version" value="0.9-dev"/>
+    <property name="forrest.version" value="0.9"/>
     <property name="forrest.core" location="."/>
     <property name="java.dir"              location="java"/>
     <property name="plugins.dir"           location="${forrest.home}/plugins"/>
@@ -61,7 +61,7 @@
     <property name="forrestbot.dir"         location="${forrest.home}/tools/forrestbot"/>
     <mkdir dir="${build.dir}"/>
     <buildnumber file="${build.dir}/build.number"/>
-    <echo>
+    <echo level="info">
       --------------------------------------------------------------
 
       Using ${ant.version}
@@ -127,6 +127,8 @@
         <include name="**/forrest"/>
       </tarfileset>
     </tar>
+    <checksum file="${dist.dir}/${release-name-bin}.tar.gz" algorithm="md5" forceOverwrite="true" />
+    <checksum file="${dist.dir}/${release-name-bin}.tar.gz" algorithm="sha1" forceOverwrite="true" />
 <!-- Prepare *.zip for "crlf" eol-style systems -->
 <!-- FIXME: 2007-04-11
      Leaving this alone. fixcrlf seems to mess with some images and jar files.
@@ -139,6 +141,8 @@
       file="${dist.dir}/${release-name-bin}.zip" >
       <zipfileset dir="${dist-shbat.dir}" prefix="${release-name-bin}"/>
     </zip>
+    <checksum file="${dist.dir}/${release-name-bin}.zip" algorithm="md5" forceOverwrite="true" />
+    <checksum file="${dist.dir}/${release-name-bin}.zip" algorithm="sha1" forceOverwrite="true" />
   </target>
 <!-- =================================================================== -->
 <!-- Make all known distributions                                        -->
@@ -183,6 +187,11 @@ Remove any build directories in a tree before running.
     </apply>
   </target>
   <target name="xmlformat-single" depends="init">
+<!-- Notes:
+You need 'xmlformat' locally installed.
+Change the last arg to be your single file.
+See other notes above.
+-->
     <exec dir="${build.dir}" executable="xmlformat">
       <arg line="-f${forrest.home}/etc/xmlformat.conf"/>
       <arg line="-i"/>
@@ -195,6 +204,7 @@ Remove any build directories in a tree before running.
 <!-- =================================================================== -->
 <!-- Test tidy.sf.net on a single xml-type file                          -->
 <!-- See also etc/tidy-xml.pl                                            -->
+<!-- FIXME: We use 'xmlformat' instead. See above and FOR-644.           -->
 <!-- =================================================================== -->
   <target name="tidy-xml-file" depends="init">
     <exec dir="${build.dir}" executable="tidy">
@@ -214,7 +224,7 @@ Remove any build directories in a tree before running.
       </classpath>
     </taskdef>
 <!-- skinconf.xml -->
-    <echo message="validating **/skinconf.xml ..."/>
+    <echo level="info" message="validating **/skinconf.xml ..."/>
     <xmlvalidate failonerror="true" lenient="no" warn="yes">
       <xmlcatalog id="xcat">
         <catalogpath>
@@ -226,21 +236,21 @@ Remove any build directories in a tree before running.
         includes="**/skinconf.xml" />
     </xmlvalidate>
 <!-- All stylesheets **/*.xsl -->
-    <echo message="validating stylesheets **/*.xsl ..."/>
+    <echo level="info" message="validating stylesheets **/*.xsl ..."/>
     <jing rngfile="${forrest.core}/webapp/resources/schema/relaxng/xslt.rng">
       <fileset dir="${forrest.core}" includes="**/*.xsl"/>
       <fileset dir="${tools.dir}" includes="**/*.xsl"/>
     </jing>
 <!-- sitemap.xmap -->
 <!-- commented out see http://issues.apache.org/bugzilla/show_bug.cgi?id=33378 
-    <echo message="validating **/sitemap.xmap ..."/>
+    <echo level="info" message="validating **/sitemap.xmap ..."/>
     <jing rngfile="${forrest.core}/webapp/resources/schema/relaxng/sitemap-v06.rng">
       <fileset dir="${forrest.core}/webapp/" includes="*.xmap"/>
     </jing>
     -->
 <!-- book.xml -->
 <!-- FIXME: Need Norm Walsh catalog entity resolver or Jeff's DoctypeChanger.
-    <echo message="validating **/book.xml ..."/>
+    <echo level="info" message="validating **/book.xml ..."/>
     <jing rngfile="${forrest.core}/resources/schema/relaxng/book-v01.rng">
       <fileset dir="${forrest.core}" includes="**/book.xml"/>
     </jing>
@@ -251,21 +261,23 @@ Remove any build directories in a tree before running.
 <!-- fresh drop-off location for the distribution -->
     <delete dir="${dist-shbat.dir}" />
     <mkdir dir="${dist-shbat.dir}" />
-    <echo>Copy Forrest core files from ${forrest.home}</echo>
+    <echo level="info">Copy Forrest core files from ${forrest.home}</echo>
     <copy todir="${dist-shbat.dir}">
       <fileset dir="${forrest.home}" >
         <exclude name="admin/**"/>
         <exclude name="build/**"/>
+        <exclude name="etc/**"/>
         <exclude name="whiteboard/**"/>
         <exclude name="plugins/**"/>
 <!-- exclude some tools that are not yet ready to be bundled -->
+        <exclude name="examples/**"/>
         <exclude name="tools/eclipse/**"/>
         <exclude name="tools/logos/**"/>
 <!-- testing removal of tools/anttasks FOR-911 -->
         <exclude name="tools/anttasks/**"/>
       </fileset>
     </copy>
-    <echo>Copy plugin related files from ${plugins.dir}</echo>
+    <echo level="info">Copy plugin related files from ${plugins.dir}</echo>
     <copy todir="${dist-shbat.dir}/plugins">
       <fileset dir="${plugins.dir}" >
         <include name="plugins.xml"/>
@@ -274,17 +286,27 @@ Remove any build directories in a tree before running.
         <include name="org.apache.forrest.plugin.output.pdf/**"/>
       </fileset>
     </copy>
-    <echo>Copy whiteboard plugin related files</echo>
+    <echo level="info">Copy whiteboard plugin related files</echo>
     <copy todir="${dist-shbat.dir}/whiteboard/plugins">
       <fileset dir="${forrest.home}/whiteboard/plugins" >
         <include name="whiteboard-plugins.xml"/>
         <include name="build.xml"/>
       </fileset>
     </copy>
-    <echo>Copy forrest.jar</echo>
+    <echo level="info">Copy forrest.jar</echo>
     <copy todir="${dist-shbat.dir}">
       <fileset dir="${forrest.home}" >
         <include name="build/xml-forrest.jar"/>
+      </fileset>
+    </copy>
+    <echo level="info">Copy some miscellaneous stuff</echo>
+    <copy todir="${dist-shbat.dir}">
+      <fileset dir="${forrest.home}" >
+        <include name="etc/README.txt"/>
+        <include name="etc/RELEASE*.txt"/>
+        <include name="etc/AnsiColorLogger.properties"/>
+        <include name="etc/publishing_our_site.txt"/>
+        <include name="etc/xmlformat.conf"/>
       </fileset>
     </copy>
 <!-- Fix bin/ permissions -->
@@ -295,7 +317,7 @@ Remove any build directories in a tree before running.
     <fixcrlf eol="crlf" srcdir="${dist-shbat.dir}/tools/ant/bin" includes="*.bat"/>
     <fixcrlf eol="lf" srcdir="${dist-shbat.dir}/tools/ant/bin" excludes="*.bat"/>
     <chmod dir="${dist-shbat.dir}/tools/ant/bin" perm="ugo+rx" excludes="*.bat"/>
-    <echo>
+    <echo level="info">
   *-----------------------------------------------------------------
   | installation notice 
   *-----------------------------------------------------------------
@@ -333,29 +355,37 @@ Remove any build directories in a tree before running.
   <target name="test" 
           depends="validate-config, testseed, testPlugins" 
           description="Test that the features are okay before committing."/>
+  <target name="test-basic" 
+          depends="validate-config, testseedBasic"/>
+  <target name="test-sample" depends="validate-config"
+          description="Does 'seed-sample' and generates the 'skinned' site">
+    <antcall target="testSiteType">
+      <param name="test.site.type" value="skinned"/>
+    </antcall>
+  </target>
   <target name="testPlugins"
           depends="cleanPlugins"
           description="Test each type of the plugin">
 <!--
       FIXME: these don't work as the compile stage executes since $java.dir = FORREST_HOME/main/java
       instead of PLUGIN_HOME/java
-    <echo>=============================</echo>
-    <echo>Testing using an input plugin</echo>
-    <echo>=============================</echo>
+    <echo level="info">=============================</echo>
+    <echo level="info">Testing using an input plugin</echo>
+    <echo level="info">=============================</echo>
     <ant antfile="${forrest.home}/plugins/org.apache.forrest.plugin.excel/build.xml" target="test">
       <property name="basedir" location="${forrest.home}/plugins/org.apache.forrest.plugin.excel"/>
     </ant>
     
-    <echo>=============================</echo>
-    <echo>Testing using an ouptut plugin</echo>      
-    <echo>=============================</echo>
+    <echo level="info">=============================</echo>
+    <echo level="info">Testing using an ouptut plugin</echo>      
+    <echo level="info">=============================</echo>
     <ant antfile="${forrest.home}/plugins/org.apache.forrest.plugin.output.pdf/build.xml" target="test">
       <property name="basedir" location="${forrest.home}/plugins/org.apache.forrest.plugin.output.pdf"/>
     </ant>
     
-    <echo>=============================</echo>
-    <echo>Testing using an internal plugin</echo>
-    <echo>=============================</echo>
+    <echo level="info">=============================</echo>
+    <echo level="info">Testing using an internal plugin</echo>
+    <echo level="info">=============================</echo>
     <ant antfile="${forrest.home}/plugins/IMSManifest/build.xml" target="test">
       <property name="basedir" location="${forrest.home}/plugins/IMSManifest"/>
     </ant>
@@ -367,10 +397,21 @@ Remove any build directories in a tree before running.
   </target>
   <target name="testseed"
 	  depends="init, cleanPlugins"
-          description="Called by test target - Seeds and generates the different types of sites (skinned, dispatcher...)">
+          description="Called by test target - Does 'seed-sample' and generates the different types of sites (skinned, dispatcher...)">
     <for list="skinned,dispatcher" param="type">
       <sequential>
         <antcall target="testSiteType">
+          <param name="test.site.type" value="@{type}"/>
+        </antcall>
+      </sequential>
+    </for>
+  </target>
+  <target name="testseedBasic"
+          depends="init, cleanPlugins"
+          description="Called by test target - Does 'seed-basic' and generates the different types of sites (skinned, dispatcher...)">
+    <for list="skinned,dispatcher" param="type">
+      <sequential>
+        <antcall target="testSiteBasicType">
           <param name="test.site.type" value="@{type}"/>
         </antcall>
       </sequential>
@@ -380,6 +421,16 @@ Remove any build directories in a tree before running.
 	  depends="testSeedSiteType,testReplacePluginsList"
           if="test.site.type"
 	  description="Called by test target - Seeds, replaces list of required plugins and generates a new site for testing">
+
+    <ant antfile="${forrest.core}/forrest.build.xml" target="site" inheritAll="false">
+      <property name="forrest.home" value="${forrest.home}"/>
+      <property name="project.home" value="${test.dir}"/>
+    </ant>
+  </target>
+  <target name="testSiteBasicType"
+	  depends="testSeedSiteBasicType,testReplacePluginsList"
+          if="test.site.type"
+	  description="Called by test target - Seeds, replaces list of required plugins and generates a new site for testing">
     <ant antfile="${forrest.core}/forrest.build.xml" target="site">
       <property name="forrest.home" value="${forrest.home}"/>
       <property name="project.home" value="${test.dir}"/>
@@ -387,7 +438,7 @@ Remove any build directories in a tree before running.
   </target>
   <target name="testSeedSiteType"
 	  description="Called by test target - Seeds a new site for testing and read the value of project.required.plugins if supplied">
-    <echo>
+    <echo level="info">
       -------------------------------------
       Testing seeded ${test.site.type} site ...
       -------------------------------------
@@ -406,10 +457,30 @@ Remove any build directories in a tree before running.
       <fileset dir="${test.dir}" includes="forrest.properties.*.properties"/>
     </delete>
   </target>
+  <target name="testSeedSiteBasicType">
+    <echo level="info">
+      -------------------------------------
+      Testing seeded basic ${test.site.type} site ...
+      -------------------------------------
+    </echo>
+    <echo/>
+    <property name="test.dir" value="${build.dir}/test_${test.site.type}_site"/>
+    <delete dir="${test.dir}"/>
+    <mkdir dir="${test.dir}"/>
+    <ant antfile="${forrest.core}/forrest.build.xml" target="seed-basic">
+      <property name="forrest.home" value="${forrest.home}"/>
+      <property name="project.home" value="${test.dir}"/>
+    </ant>
+<!-- reading the value of project.required.plugins property if defined in forrest.properties.${test.site.type}.properties -->
+    <property file="${test.dir}/forrest.properties.${test.site.type}.properties"/>
+    <delete file="${test.dir}/forrest.properties.*.properties" failonerror="false">
+      <fileset dir="${test.dir}" includes="forrest.properties.*.properties"/>
+    </delete>
+  </target>
   <target name="testReplacePluginsList"
           if="project.required.plugins"
           description="Called by test target - Replaces the list of required plugins if supplied for testing a new site">
-    <echo message="Replace the plugins list"/>
+    <echo level="info" message="Replace the plugins list"/>
     <replaceregexp file="${test.dir}/forrest.properties"
       match="project.required.plugins=(.+)"
       replace="project.required.plugins=${project.required.plugins}"
@@ -423,6 +494,17 @@ Remove any build directories in a tree before running.
        ================================================== -->
   <target  name="gump" description="Target used by Gump: forrest">
     <antcall target="jar"/>
+  </target>
+<!-- Target used by Gump to run RAT on Forrest sources -->
+  <target name="gump-rat" depends="init"
+      description="Target used by Gump: forrest-rat">
+    <typedef resource="org/apache/rat/anttasks/antlib.xml"
+        uri="antlib:org.apache.rat.anttasks"/>
+    <rat:report xmlns:rat="antlib:org.apache.rat.anttasks">
+      <fileset dir="${forrest.home}">
+        <excludesfile name="${forrest.home}/etc/rat-avoid.txt"/>
+      </fileset>
+    </rat:report>
   </target>
 <!-- =================================================================== -->
 <!-- Compile Cocoon java classes                                         -->
@@ -443,8 +525,11 @@ Remove any build directories in a tree before running.
 <!-- Jar Cocoon classes                                                  -->
 <!-- =================================================================== -->
   <target name="jar" depends="init, compile">
-    <jar destfile="${build.dir}/xml-forrest.jar"
-      basedir="${build.classes}">
+    <jar destfile="${build.dir}/xml-forrest.jar">
+      <fileset dir="${build.classes}"/>
+      <fileset file="${forrest.core}/webapp/WEB-INF/ehcache.xml"/>
+      <fileset file="${forrest.home}/LICENSE.txt"/>
+      <fileset file="${forrest.home}/NOTICE.txt"/>
       <manifest>
         <section name="org/apache/forrest/">
           <attribute name="Comment" value="Support classes for Apache Forrest"/>
@@ -462,7 +547,7 @@ Remove any build directories in a tree before running.
         </section>
       </manifest>
     </jar>
-    <echo>
+    <echo level="info">
   *-----------------------------------------------------------------
   | Installation notice 
   *-----------------------------------------------------------------
